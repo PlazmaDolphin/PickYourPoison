@@ -1,68 +1,56 @@
 using UnityEngine;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public int health = 5;
-    public float speed = 2f; // Movement speed
-    private Rigidbody2D rb;
-    private Vector2 movementDirection;
-    
-    private float changeDirectionInterval = 1f; // How often to change direction (in seconds)
-    private float timer;
+    public float speed = 2f;
+    public Transform target;
+    public float stopDistance = 0.5f; // Distance to maintain from player
+    public float punchDelay = 1f; // Delay before punching
 
-    void Start()
+    private bool hasReachedPlayer = false;
+
+    private void Update()
     {
-        rb = GetComponent<Rigidbody2D>();
-        if (rb == null)
+        if (target != null && !hasReachedPlayer)
         {
-            Debug.LogError("Rigidbody2D component not found on enemy!");
+            // Move towards the player but stop at a certain distance
+            float distance = Vector2.Distance(transform.position, target.position);
+            if (distance > stopDistance)
+            {
+                Vector2 direction = (target.position - transform.position).normalized;
+                transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            }
+            else
+            {
+                // Stop movement when within the stopDistance
+                hasReachedPlayer = true;
+                StartCoroutine(PunchAfterDelay());
+            }
+        }
+    }
+
+    private IEnumerator PunchAfterDelay()
+    {
+        // Wait for the specified punch delay
+        yield return new WaitForSeconds(punchDelay);
+
+        // Perform the punch action (e.g., reduce player's health, play animation, etc.)
+        if (target != null)
+        {
+            Debug.Log("Enemy punches the player!");
+            // Add your punch logic here (e.g., reduce player's health)
         }
 
-        SetRandomDirection();
-        timer = changeDirectionInterval;
+        // Reset behavior if needed, or make the enemy idle
+        hasReachedPlayer = false;
     }
 
-    void Update()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Update timer and change direction when needed
-        timer -= Time.deltaTime;
-        if (timer <= 0)
+        if (collision.gameObject.CompareTag("Player"))
         {
-            SetRandomDirection();
-            timer = changeDirectionInterval;
+            Debug.Log("Enemy collided with player!");
         }
-        
-        // Apply velocity based on the current random direction
-        rb.linearVelocity = movementDirection * speed;
-
-        // Keep the enemy within the screen bounds (optional)
-        Vector3 pos = transform.position;
-        float camWidth = Camera.main.orthographicSize * Camera.main.aspect;
-        float camHeight = Camera.main.orthographicSize;
-        pos.x = Mathf.Clamp(pos.x, -camWidth, camWidth);
-        pos.y = Mathf.Clamp(pos.y, -camHeight, camHeight);
-        transform.position = pos;
-    }
-
-    void SetRandomDirection()
-    {
-        // Choose a random normalized direction vector
-        movementDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-    }
-
-    // Static spawn method: spawns an enemy inside the screen bounds
-    public static void SpawnEnemy(GameObject enemyPrefab)
-    {
-        if (Camera.main == null) return;
-
-        float camWidth = Camera.main.orthographicSize * Camera.main.aspect;
-        float camHeight = Camera.main.orthographicSize;
-        
-        // Random spawn position inside the camera's view
-        float randomX = Random.Range(-camWidth, camWidth);
-        float randomY = Random.Range(-camHeight, camHeight);
-
-        Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
     }
 }
