@@ -3,8 +3,8 @@ using UnityEngine;
 public class SoundEffectsPlayer : MonoBehaviour
 {
 
-    public AudioSource src;
-    public AudioClip drinksfx, atksfx, majsfx, dmgsfx, goblinsfx;
+    public AudioSource src;//the source audio that take the audio from any clip being played to play it
+    public AudioClip drinksfx, atksfx, majsfx, dmgsfx, goblinsfx; //audio clip names go here
 
     public void Drinking() //drinking any potion sound effect
     {
@@ -37,8 +37,8 @@ public class SoundEffectsPlayer : MonoBehaviour
         src.clip = goblinsfx;
         src.Play();
     }
-
 /*
+
     public void bartender() //voice line for bartender 
     {
         src.clip = bartsfx; //pick your poison
