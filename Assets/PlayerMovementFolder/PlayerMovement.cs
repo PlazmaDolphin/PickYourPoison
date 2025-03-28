@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // Apply movement
-        rb.velocity = movement * moveSpeed;
+        rb.linearVelocity = movement * moveSpeed;
 
         // Clamp position inside the box
         Vector2 clampedPosition = rb.position;
