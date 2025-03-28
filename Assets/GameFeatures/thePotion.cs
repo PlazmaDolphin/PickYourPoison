@@ -38,7 +38,7 @@ public class thePotion : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("PlayerHitbox"))
+        if (other.gameObject.CompareTag("Player"))
         {
             //Add potion to player inventory
             PlayerMovement player = other.gameObject.GetComponent<PlayerMovement>();

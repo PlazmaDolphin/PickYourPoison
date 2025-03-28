@@ -69,18 +69,20 @@ public class PlayerMovement : MonoBehaviour
 <<<<<<< HEAD
 
 =======
-        if (Input.GetKeyDown(KeyCode.LeftShift)){
+        if (Input.GetKeyDown(KeyCode.LeftShift) && potionType != 0){
             //spawn fireball
             GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
             fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
             Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
             //move up a little
             fireball.transform.position += new Vector3(0, 1f, 0);
+            potionType = 0;
         }
         //Update animation
 >>>>>>> b6efd02a994833c85c5c23111ce93386fc5eef9b
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
+        animator.SetBool("potionHeld", potionType != 0);
     }
 
     void FixedUpdate()
