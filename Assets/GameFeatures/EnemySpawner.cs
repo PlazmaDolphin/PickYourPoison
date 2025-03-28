@@ -9,17 +9,30 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating(nameof(SpawnEnemy), 2f, spawnInterval); // Start spawning after 2 seconds
+        // Start spawning after 2 seconds, repeat every spawnInterval
+        InvokeRepeating(nameof(SpawnEnemy), 2f, spawnInterval);
     }
 
     void SpawnEnemy()
     {
-        if (enemyPrefab == null) return;
+        // Ensure enemyPrefab is assigned
+        if (enemyPrefab == null)
+        {
+            Debug.LogError("Enemy prefab is not assigned!");
+            return;
+        }
 
-        float randomX = Random.Range(-screenWidth / 2, screenWidth / 2);
-        float spawnY = (Random.value > 0.5f) ? screenHeight / 2 + 1 : -screenHeight / 2 - 1; // Above or below screen
+        // Get screen bounds in world coordinates
+        float screenWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
+        float screenHeight = Camera.main.orthographicSize;
+
+        // Pick a random X position within the screen width
+        float randomX = Random.Range(-screenWidth, screenWidth);
+
+        // Spawn above or below the screen
+        float spawnY = (Random.value > 0.5f) ? screenHeight + 2 : -screenHeight - 2; 
 
         Vector3 spawnPosition = new Vector3(randomX, spawnY, 0);
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity); // Instantiate enemy
     }
 }
