@@ -1,10 +1,12 @@
 using UnityEngine;
 
+//this is really just the player class
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
     private Rigidbody2D rb;
     private Vector2 movement;
+    public int potionType = 0; // (0 = no potion)
 
     // Define boundary limits (adjust these based on your box size)
     public float minX = -5f, maxX = 5f;
@@ -38,5 +40,10 @@ public class PlayerMovement : MonoBehaviour
         clampedPosition.x = Mathf.Clamp(clampedPosition.x, minX, maxX);
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, minY, maxY);
         rb.position = clampedPosition;
+    }
+    public void AddPotion(int potionType)
+    {
+        this.potionType = potionType;
+        //UPDATE ANIMATION HERE
     }
 }
