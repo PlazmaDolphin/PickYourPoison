@@ -2,47 +2,57 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int health = 5; // FIXME
+    public int health = 5;
     public const int WEAKNESS = 1; // Fire? Lightning? Ice?
-    public BoxCollider movementBounds; // Assign a BoxCollider in the Inspector
     public float speed = 2f; // Movement speed
-    private Vector3 minBounds, maxBounds;
-    private bool movingUp = true;
     private Transform player;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player")?.transform; // Finds the player if tagged correctly
+        // Find the player using the "Player" tag
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        if (movementBounds == null)
+        if (player == null)
         {
-            Debug.LogError("Movement Bounds not set! Please assign a BoxCollider.");
-            return;
+            Debug.LogError("Player not found! Make sure the Player GameObject has the 'Player' tag.");
         }
-    if (player == null) Debug.LogError("Player not found! Make sure the Player GameObject has the 'Player' tag.");
-
-        // Calculate the min and max Y bounds based on the BoxCollider
-        minBounds = new Vector3(transform.position.x, movementBounds.bounds.min.y, transform.position.z);
-        maxBounds = new Vector3(transform.position.x, movementBounds.bounds.max.y, transform.position.z);
     }
 
 void Update()
 {
-    if (player == null) return; // Ensure player is assigned
+    if (player == null) return; // Ensure player exists
 
-    // Move towards the player
-    Vector3 direction = (player.position - transform.position).normalized;
-    transform.position += direction * speed * Time.deltaTime;
+    float stoppingDistance = 0.3f; // Stop before hitting the player
+    float distance = Vector3.Distance(transform.position, player.position);
+
+    if (distance > stoppingDistance)
+    {
+        // Move towards the player
+        Vector3 direction = (player.position - transform.position).normalized;
+        transform.position += direction * speed * Time.deltaTime;
+
+        // Debug to check if movement is happening
+        Debug.Log("Enemy moving towards player: " + direction);
+    }
 }
 
 
+public static void SpawnEnemy(GameObject enemyPrefab)
+{
+    if (Camera.main == null) return;
 
-    public static void SpawnEnemy(GameObject enemyPrefab, float screenWidth, float screenHeight)
-    {
-        float randomX = Random.Range(-screenWidth / 2, screenWidth / 2);
-        float spawnY = (Random.value > 0.5f) ? screenHeight / 2 + 1 : -screenHeight / 2 - 1; // Above or below screen
+    // Get screen bounds in world coordinates
+    float screenWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
+    float screenHeight = Camera.main.orthographicSize;
 
-        Vector3 spawnPosition = new Vector3(randomX, spawnY, 0);
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-    }
+    // Pick a random X position within the screen width
+    float randomX = Random.Range(-screenWidth, screenWidth);
+
+    // Spawn above or below the screen
+    float spawnY = (Random.value > 0.5f) ? screenHeight + 2 : -screenHeight - 2; 
+
+    Vector3 spawnPosition = new Vector3(randomX, spawnY, 0);
+    Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+}
+
 }
