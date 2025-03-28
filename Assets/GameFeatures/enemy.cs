@@ -3,69 +3,66 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int health = 5;
-    public const int WEAKNESS = 1; // Fire? Lightning? Ice?
     public float speed = 2f; // Movement speed
-    private Transform player;
     private Rigidbody2D rb;
+    private Vector2 movementDirection;
+    
+    private float changeDirectionInterval = 1f; // How often to change direction (in seconds)
+    private float timer;
 
     void Start()
     {
-        // Find the player using the "Player" tag
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
-
-        if (player == null)
-        {
-            Debug.LogError("Player not found! Make sure the Player GameObject has the 'Player' tag.");
-        }
-
-        // Get Rigidbody2D component to apply velocity
         rb = GetComponent<Rigidbody2D>();
         if (rb == null)
         {
-            Debug.LogError("Rigidbody2D component not found! Make sure the Enemy GameObject has a Rigidbody2D attached.");
+            Debug.LogError("Rigidbody2D component not found on enemy!");
         }
+
+        SetRandomDirection();
+        timer = changeDirectionInterval;
     }
 
     void Update()
     {
-        if (player == null) return; // Ensure player exists
-
-        float stoppingDistance = 0.3f; // Distance where the enemy stops moving
-        float distance = Vector3.Distance(transform.position, player.position);
-
-        if (distance > stoppingDistance)
+        // Update timer and change direction when needed
+        timer -= Time.deltaTime;
+        if (timer <= 0)
         {
-            // Calculate direction towards the player
-            Vector3 direction = (player.position - transform.position).normalized;
-
-            // Apply velocity towards the player using Rigidbody2D
-            rb.linearVelocity = new Vector2(direction.x, direction.y) * speed;
-
-            // Debug to check if movement is happening
-            Debug.Log("Enemy moving towards player: " + direction);
+            SetRandomDirection();
+            timer = changeDirectionInterval;
         }
-        else
-        {
-            // Stop moving when within stopping distance
-            rb.linearVelocity = Vector2.zero;
-        }
+        
+        // Apply velocity based on the current random direction
+        rb.linearVelocity = movementDirection * speed;
+
+        // Keep the enemy within the screen bounds (optional)
+        Vector3 pos = transform.position;
+        float camWidth = Camera.main.orthographicSize * Camera.main.aspect;
+        float camHeight = Camera.main.orthographicSize;
+        pos.x = Mathf.Clamp(pos.x, -camWidth, camWidth);
+        pos.y = Mathf.Clamp(pos.y, -camHeight, camHeight);
+        transform.position = pos;
     }
 
+    void SetRandomDirection()
+    {
+        // Choose a random normalized direction vector
+        movementDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+    }
+
+    // Static spawn method: spawns an enemy inside the screen bounds
     public static void SpawnEnemy(GameObject enemyPrefab)
     {
         if (Camera.main == null) return;
 
-        // Get screen bounds in world coordinates
-        float screenWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
-        float screenHeight = Camera.main.orthographicSize;
+        float camWidth = Camera.main.orthographicSize * Camera.main.aspect;
+        float camHeight = Camera.main.orthographicSize;
+        
+        // Random spawn position inside the camera's view
+        float randomX = Random.Range(-camWidth, camWidth);
+        float randomY = Random.Range(-camHeight, camHeight);
 
-        // Pick a random X position within the screen width
-        float randomX = Random.Range(-screenWidth, screenWidth);
-
-        // Spawn above or below the screen
-        float spawnY = (Random.value > 0.5f) ? screenHeight + 2 : -screenHeight - 2;
-
-        Vector3 spawnPosition = new Vector3(randomX, spawnY, 0);
+        Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
         Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
     }
 }
