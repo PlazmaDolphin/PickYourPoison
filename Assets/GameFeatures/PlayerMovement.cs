@@ -141,4 +141,9 @@ public class PlayerMovement : MonoBehaviour
 
         isPunching = false;
     }
+
+    public void AddPotion(int potiontype)
+    {
+
+    }
 }
