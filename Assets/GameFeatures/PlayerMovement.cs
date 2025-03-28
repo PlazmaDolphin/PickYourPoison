@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movement;
     public Transform cursorLocation;
     public Animator animator;
+    public static Transform PlayerLocation;
     public GameObject fireballPrefab;
 
     // FIXME bounding box
@@ -53,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
             flipped = false;
         }
 
+        PlayerLocation = transform;
 
         if (Input.GetKeyDown(KeyCode.Space) && !isPunching)
         {
@@ -72,17 +74,28 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("punching", isPunching);
     }
 
-    void FixedUpdate()
-    {
-        // Apply movement
-        rb.linearVelocity = movement * moveSpeed;
+void FixedUpdate()
+{
+    // Apply movement
+    rb.linearVelocity = movement * moveSpeed;
 
-        // Clamp position inside the box
-        Vector2 clampedPosition = rb.position;
-        clampedPosition.x = Mathf.Clamp(clampedPosition.x, minX, maxX);
-        clampedPosition.y = Mathf.Clamp(clampedPosition.y, minY, maxY);
-        rb.position = clampedPosition;
-    }
+    // Get the camera's size and aspect ratio for dynamic boundaries
+    float screenWidth = Camera.main.orthographicSize * Camera.main.aspect;
+    float screenHeight = Camera.main.orthographicSize;
+
+    // Dynamically update boundary values based on camera size
+    float dynamicMinX = -screenWidth;
+    float dynamicMaxX = screenWidth;
+    float dynamicMinY = -screenHeight;
+    float dynamicMaxY = screenHeight;
+
+    // Clamp position inside the screen area (based on camera size)
+    Vector2 clampedPosition = rb.position;
+    clampedPosition.x = Mathf.Clamp(clampedPosition.x, dynamicMinX, dynamicMaxX);
+    clampedPosition.y = Mathf.Clamp(clampedPosition.y, dynamicMinY, dynamicMaxY);
+    rb.position = clampedPosition;
+}
+
     // Punch Mechanic
     IEnumerator Punch()
     {
