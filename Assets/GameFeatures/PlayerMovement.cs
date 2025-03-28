@@ -12,9 +12,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform cursorLocation;
     public Animator animator;
 
-    // Define boundary limits (adjust these based on your box size)
-    public float minX = -5f, maxX = 5f;
-    public float minY = -5f, maxY = 5f;
+    // FIXME bounding box
+    public float minX = -8f, maxX = 8f;
+    public float minY = -4.5f, maxY = 3f;
     private bool flipped = false;
 
     // Punching
