@@ -11,13 +11,24 @@ public class Enemy : MonoBehaviour
     private int health = 5; // Enemy health
     private bool hasReachedPlayer = false;
 
-    private void Update()
+    void Start()
+    {
+        // Dynamically assign target (player)
+        if (target == null && GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            target = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+    }
+
+    void Update()
     {
         if (target != null && !hasReachedPlayer)
         {
             float distance = Vector2.Distance(transform.position, target.position);
+
             if (distance > stopDistance)
             {
+                // Move towards the player
                 Vector2 direction = (target.position - transform.position).normalized;
                 transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             }
@@ -40,14 +51,6 @@ public class Enemy : MonoBehaviour
         }
 
         hasReachedPlayer = false;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Enemy collided with player!");
-        }
     }
 
     public void TakeDamage()

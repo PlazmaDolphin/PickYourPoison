@@ -13,9 +13,17 @@ public class PlayerMovement : MonoBehaviour
     public static Transform PlayerLocation;
     public GameObject fireballPrefab;
 
+<<<<<<< HEAD
+    // You can remove these if you want the player to move freely,
+    // or adjust them dynamically based on the camera.
+    // public float minX = -7.91f, maxX = 8.08f;
+    // public float minY = -4.96f, maxY = 2.2f;
+
+=======
     // FIXME bounding box
     private float minX = -8f, maxX = 8f;
     private float minY = -5f, maxY = 2.3f;
+>>>>>>> b6efd02a994833c85c5c23111ce93386fc5eef9b
     private bool flipped = false;
 
     // Punching
@@ -58,16 +66,19 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Punch());
         }
+<<<<<<< HEAD
+
+=======
         if (Input.GetKeyDown(KeyCode.LeftShift)){
             //spawn fireball
-            transform.position += new Vector3(0, 1f, 0);
             GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
             fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
-            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
+            Physics2D.IgnoreCollision(fireball.GetComponent<Collider2D>(), GetComponent<Collider2D>());
             //move up a little
-            transform.position -= new Vector3(0, 1f, 0);
+            fireball.transform.position += new Vector3(0, 1f, 0);
         }
         //Update animation
+>>>>>>> b6efd02a994833c85c5c23111ce93386fc5eef9b
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
     }
@@ -78,21 +89,21 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = movement * moveSpeed;
     }
 
-IEnumerator Punch()
-{
-    isPunching = true;
-
-    // Punch logic
-    RaycastHit2D hit = Physics2D.Raycast(transform.position, (flipped ? Vector2.left : Vector2.right), punchRange);
-    if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+    // Simple punch mechanic (expand as needed)
+    IEnumerator Punch()
     {
-        Debug.Log("Punch hit: " + hit.collider.name);
-        hit.collider.GetComponent<Enemy>().TakeDamage(); // Call TakeDamage on the enemy
-    }
+        isPunching = true;
 
-    yield return new WaitForSeconds(punchDuration);
-    isPunching = false;
-}
+        // Example punch logic; you can expand this as needed
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, (flipped ? Vector2.left : Vector2.right), punchRange);
+        if (hit.collider != null)
+        {
+            Debug.Log("Punch hit: " + hit.collider.name);
+        }
+
+        yield return new WaitForSeconds(punchDuration);
+        isPunching = false;
+    }
 
     public void AddPotion(int potionType)
     {

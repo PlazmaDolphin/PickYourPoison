@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e8a22636fed00284db270f4ea06ddab5
+guid: b144c7c2334f69b409683312d12771dc
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: fireball_midflight_2
+  - name: bartender_lightning
     originalName: 
-    pivot: {x: 0.5925926, y: -0.35}
+    pivot: {x: 0.4, y: -0.033333335}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,9 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 27
-      height: 20
-    spriteID: edd5032837eb2c54cbb367897925d8a4
+      width: 20
+      height: 30
+    spriteID: fe90deffb77941f4ca7c0279db9dcd7c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -147,21 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1183107217
-    name: fireball_midflight_2
+    guid: 1842986512
+    name: bartender_lightning
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: fireball_midflight_2
+    - name: bartender_lightning
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 0
-        y: 7
-        width: 27
-        height: 20
-      spriteId: edd5032837eb2c54cbb367897925d8a4
+        x: 8
+        y: 1
+        width: 20
+        height: 30
+      spriteId: fe90deffb77941f4ca7c0279db9dcd7c
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -181,4 +181,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 64, y: 32}
+  previousTextureSize: {x: 32, y: 64}
