@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Punch());
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift)){
+        if (Input.GetKeyDown(KeyCode.LeftShift) && potionType != 0){
             //spawn fireball
             transform.position += new Vector3(0, 1f, 0);
             GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
@@ -66,10 +66,12 @@ public class PlayerMovement : MonoBehaviour
             Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
             //move up a little
             transform.position -= new Vector3(0, 1f, 0);
+            potionType = 0;
         }
         //Update animation
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
+        animator.SetBool("potionHeld", potionType != 0);
     }
 
     void FixedUpdate()
