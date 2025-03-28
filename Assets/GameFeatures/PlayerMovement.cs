@@ -54,16 +54,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        // Trigger attack rotation on left-click (no mouse influence on rotation)
-        if (Input.GetMouseButtonDown(0) && !isRotating)  // 0 is for left-click
-        {
-            StartCoroutine(RotateAndSnapBack()); // Start the attack rotation coroutine
-        }
-
-        // Trigger punch when player presses the "Fire1" (usually left mouse or Ctrl)
-        if (Input.GetButtonDown("Fire1") && !isPunching)
+        if (Input.GetKeyDown(KeyCode.Space) && !isPunching)
         {
             StartCoroutine(Punch());
+            
         }
         //Update animation
         animator.SetFloat("speed", movement.magnitude);
