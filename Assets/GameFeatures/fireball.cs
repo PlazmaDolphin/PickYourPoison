@@ -12,6 +12,8 @@ public class fireball : MonoBehaviour
     void Start()
     {
         initPos = transform.position;
+        //change rotation
+        transform.rotation = Quaternion.Euler(0, 0, direction * Mathf.Rad2Deg);
     }
 
     // Update is called once per frame

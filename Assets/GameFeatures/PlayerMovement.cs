@@ -60,11 +60,12 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftShift)){
             //spawn fireball
+            transform.position += new Vector3(0, 1f, 0);
             GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
             fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
-            Physics2D.IgnoreCollision(fireball.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
             //move up a little
-            fireball.transform.position += new Vector3(0, 1f, 0);
+            transform.position -= new Vector3(0, 1f, 0);
         }
         //Update animation
         animator.SetFloat("speed", movement.magnitude);
