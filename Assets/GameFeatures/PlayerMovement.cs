@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position += new Vector3(0, 1f, 0);
             GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
             fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
-            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
+            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
             //move up a little
             transform.position -= new Vector3(0, 1f, 0);
         }
