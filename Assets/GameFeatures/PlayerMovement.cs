@@ -13,9 +13,11 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     public static Transform PlayerLocation;
 
-    // FIXME bounding box
-    public float minX = -7.91f, maxX = 8.08f;
-    public float minY = -4.96f, maxY = 2.51f;
+    // You can remove these if you want the player to move freely,
+    // or adjust them dynamically based on the camera.
+    // public float minX = -7.91f, maxX = 8.08f;
+    // public float minY = -4.96f, maxY = 2.2f;
+
     private bool flipped = false;
 
     // Punching
@@ -26,98 +28,68 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>(); // Get Rigidbody2D component
+        rb = GetComponent<Rigidbody2D>();
+        PlayerLocation = transform; // Set static reference
     }
 
     void Update()
     {
-        // Get input for movement
-        //movement.x = Input.GetAxisRaw("Horizontal");
-        //movement.y = Input.GetAxisRaw("Vertical");
-        //WASD movement
+        // WASD movement
         movement.x = Input.GetKey(KeyCode.D) ? 1 : Input.GetKey(KeyCode.A) ? -1 : 0;
         movement.y = Input.GetKey(KeyCode.W) ? 1 : Input.GetKey(KeyCode.S) ? -1 : 0;
-        // Normalize movement to ensure consistent speed in all directions
         if (movement.magnitude > 1)
         {
             movement = movement.normalized;
         }
-        //Flip if mouse is to left of player
+
+        // Flip sprite based on cursor location
         if (cursorLocation.position.x < transform.position.x && !flipped)
         {
-            transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             flipped = true;
         }
-        else if (cursorLocation.position.x > transform.position.x && flipped)
+        else if (cursorLocation.position.x >= transform.position.x && flipped)
         {
-            transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             flipped = false;
         }
 
-        PlayerLocation = transform;
+        PlayerLocation = transform; // Update static reference
 
         if (Input.GetKeyDown(KeyCode.Space) && !isPunching)
         {
             StartCoroutine(Punch());
-            
         }
-        //Update animation
+
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
     }
 
-void FixedUpdate()
-{
-    // Apply movement
-    rb.linearVelocity = movement * moveSpeed;
+    void FixedUpdate()
+    {
+        // Apply movement freely; remove clamping if you want the player to use the full screen
+        rb.linearVelocity = movement * moveSpeed;
+    }
 
-    // Get the camera's size and aspect ratio for dynamic boundaries
-    float screenWidth = Camera.main.orthographicSize * Camera.main.aspect;
-    float screenHeight = Camera.main.orthographicSize;
-
-    // Dynamically update boundary values based on camera size
-    float dynamicMinX = -screenWidth;
-    float dynamicMaxX = screenWidth;
-    float dynamicMinY = -screenHeight;
-    float dynamicMaxY = screenHeight;
-
-    // Clamp position inside the screen area (based on camera size)
-    Vector2 clampedPosition = rb.position;
-    clampedPosition.x = Mathf.Clamp(clampedPosition.x, dynamicMinX, dynamicMaxX);
-    clampedPosition.y = Mathf.Clamp(clampedPosition.y, dynamicMinY, dynamicMaxY);
-    rb.position = clampedPosition;
-}
-
-    // Punch Mechanic
+    // Simple punch mechanic (expand as needed)
     IEnumerator Punch()
     {
         isPunching = true;
 
-        // Determine punch direction based on the current facing direction (leftmost side)
-        Vector2 punchDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;  // Punch in the direction of the leftmost side
-        Vector2 punchPosition = (Vector2)transform.position + punchDirection * punchRange;
-
-        // Use a collider (e.g., box or circle) to check for enemies within the punch range
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, punchDirection, punchRange);
-
-        // If the ray hits something, process the hit (e.g., deal damage)
+        // Example punch logic; you can expand this as needed
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, (flipped ? Vector2.left : Vector2.right), punchRange);
         if (hit.collider != null)
         {
             Debug.Log("Punch hit: " + hit.collider.name);
-            // You can add logic here for dealing damage, playing animations, etc.
         }
 
-        // Optionally, you can trigger a punch animation here if you have one.
-        // Example: animator.SetTrigger("Punch");
-
-        // Wait for the punch to complete
         yield return new WaitForSeconds(punchDuration);
-
         isPunching = false;
     }
+
     public void AddPotion(int potionType)
     {
         this.potionType = potionType;
-        //UPDATE ANIMATION HERE
+        // Update animation or other logic here
     }
 }
