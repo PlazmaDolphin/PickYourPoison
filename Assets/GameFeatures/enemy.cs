@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
             Debug.LogError("Movement Bounds not set! Please assign a BoxCollider.");
             return;
         }
+    if (player == null) Debug.LogError("Player not found! Make sure the Player GameObject has the 'Player' tag.");
 
         // Calculate the min and max Y bounds based on the BoxCollider
         minBounds = new Vector3(transform.position.x, movementBounds.bounds.min.y, transform.position.z);
