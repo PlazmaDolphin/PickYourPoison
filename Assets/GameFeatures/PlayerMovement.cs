@@ -161,3 +161,4 @@ public class PlayerMovement : MonoBehaviour
         this.potionType = potionType;
         //UPDATE ANIMATION HERE
     }
+}
