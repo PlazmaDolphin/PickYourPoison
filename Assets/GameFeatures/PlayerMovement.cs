@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor.Tilemaps;
+using UnityEditor.Rendering;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -7,10 +9,12 @@ public class PlayerMovement : MonoBehaviour
     public float rotationSpeed = 10f;
     private Rigidbody2D rb;
     private Vector2 movement;
+    public Transform cursorLocation;
 
     // Define boundary limits (adjust these based on your box size)
     public float minX = -5f, maxX = 5f;
     public float minY = -5f, maxY = 5f;
+    private bool flipped = false;
 
     private Quaternion originalRotation; // Store the original rotation
     private bool isRotating = false;  // To check if already rotating
@@ -19,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public float punchRange = 1f; // How far the punch reaches
     public float punchDuration = 0.2f; // Duration of the punch
     private bool isPunching = false; // Check if the player is currently punching
+    public int potionType = 0; // (0 = no potion)
 
     void Start()
     {
@@ -37,15 +42,25 @@ public class PlayerMovement : MonoBehaviour
         {
             movement = movement.normalized;
         }
-
+        //Flip if mouse is to left of player
+        if (cursorLocation.position.x < transform.position.x && !flipped)
+        {
+            transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+            flipped = true;
+        }
+        else if (cursorLocation.position.x > transform.position.x && flipped)
+        {
+            transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+            flipped = false;
+        }
         // Flip the character based on the horizontal movement (left or right)
-        if (movement.x != 0)
+        /*if (movement.x != 0)
         {
             Vector3 scale = transform.localScale;
-            scale.x = movement.x > 0 ? 0.4329175f : -0.4329175f; // Flip the sprite when moving left or right
-            scale.y = 0.3069777f; // possible FIXME
+            scale.x = movement.x > 0 ? scale.x : -scale.x; // Flip the sprite when moving left or right
+            //scale.y = 0.3069777f; // possible FIXME
             transform.localScale = scale;
-        }
+        }*/
 
         // Trigger attack rotation on left-click (no mouse influence on rotation)
         if (Input.GetMouseButtonDown(0) && !isRotating)  // 0 is for left-click
@@ -140,5 +155,10 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(punchDuration);
 
         isPunching = false;
+    }
+    public void AddPotion(int potionType)
+    {
+        this.potionType = potionType;
+        //UPDATE ANIMATION HERE
     }
 }
