@@ -34,9 +34,11 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Get input for movement
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
-
+        //movement.x = Input.GetAxisRaw("Horizontal");
+        //movement.y = Input.GetAxisRaw("Vertical");
+        //WASD movement
+        movement.x = Input.GetKey(KeyCode.D) ? 1 : Input.GetKey(KeyCode.A) ? -1 : 0;
+        movement.y = Input.GetKey(KeyCode.W) ? 1 : Input.GetKey(KeyCode.S) ? -1 : 0;
         // Normalize movement to ensure consistent speed in all directions
         if (movement.magnitude > 1)
         {
@@ -82,8 +84,8 @@ public class PlayerMovement : MonoBehaviour
 
         // Clamp position inside the box
         Vector2 clampedPosition = rb.position;
-        //clampedPosition.x = Mathf.Clamp(clampedPosition.x, minX, maxX);
-        //clampedPosition.y = Mathf.Clamp(clampedPosition.y, minY, maxY);
+        clampedPosition.x = Mathf.Clamp(clampedPosition.x, minX, maxX);
+        clampedPosition.y = Mathf.Clamp(clampedPosition.y, minY, maxY);
         rb.position = clampedPosition;
     }
 
