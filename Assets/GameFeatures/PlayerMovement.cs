@@ -11,9 +11,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movement;
     public Transform cursorLocation;
 
-    // Define boundary limits (adjust these based on your box size)
-    public float minX = -5f, maxX = 5f;
-    public float minY = -5f, maxY = 5f;
+    // FIXME bounding box
+    public float minX = -8f, maxX = 8f;
+    public float minY = -4.5f, maxY = 3f;
     private bool flipped = false;
 
     private Quaternion originalRotation; // Store the original rotation
@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         isRotating = true;
 
         // Calculate a 45-degree rotation
-        float targetAngle = transform.localScale.x > 0 ? 45f : -45f; // -45 for right, 45 for left (flipped)
+        float targetAngle = transform.localScale.x > 0 ? 45f : -45f; 
 
         // Smoothly rotate to the target angle (45 degrees increment)
         float elapsedTime = 0f;
