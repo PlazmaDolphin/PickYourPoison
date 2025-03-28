@@ -7,9 +7,7 @@ public class thePotion : MonoBehaviour
     public const int FIRE = 1;
     public const int ICE = 2;
     public const int LIGHTNING = 3;
-    public int potionType1 = FIRE;
-    public int potionType2 = ICE;
-    public int potionType3 = LIGHTNING;
+    public int potionType = FIRE;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
