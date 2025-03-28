@@ -12,8 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public Transform cursorLocation;
 
     // FIXME bounding box
-    public float minX = -8f, maxX = 8f;
-    public float minY = -4.5f, maxY = 3f;
+    public float minX = -7.91f, maxX = 8.08f;
+    public float minY = -4.96f, maxY = 2.51f;
     private bool flipped = false;
 
     private Quaternion originalRotation; // Store the original rotation
@@ -55,14 +55,7 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
             flipped = false;
         }
-        // Flip the character based on the horizontal movement (left or right)
-        /*if (movement.x != 0)
-        {
-            Vector3 scale = transform.localScale;
-            scale.x = movement.x > 0 ? scale.x : -scale.x; // Flip the sprite when moving left or right
-            //scale.y = 0.3069777f; // possible FIXME
-            transform.localScale = scale;
-        }*/
+
 
         // Trigger attack rotation on left-click (no mouse influence on rotation)
         if (Input.GetMouseButtonDown(0) && !isRotating)  // 0 is for left-click
