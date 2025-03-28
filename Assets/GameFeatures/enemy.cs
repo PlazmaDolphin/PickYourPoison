@@ -27,22 +27,23 @@ public class Enemy : MonoBehaviour
         maxBounds = new Vector3(transform.position.x, movementBounds.bounds.max.y, transform.position.z);
     }
 
-    void Update()
-    {
-        if (movementBounds == null || player == null) return;
+   void Update()
+{
+    if (movementBounds == null || player == null) return;
 
-        // Move up and down within bounds
-        float step = speed * Time.deltaTime;
-        transform.position += (movingUp ? Vector3.up : Vector3.down) * step;
+    // Move up and down within bounds
+    float step = speed * Time.deltaTime;
+    transform.position += (movingUp ? Vector3.up : Vector3.down) * step;
 
-        // Reverse direction at bounds
-        if (transform.position.y >= maxBounds.y) movingUp = false;
-        else if (transform.position.y <= minBounds.y) movingUp = true;
+    // Reverse direction at bounds
+    if (transform.position.y >= maxBounds.y) movingUp = false;
+    else if (transform.position.y <= minBounds.y) movingUp = true;
 
-        // Move towards the player's X position while keeping vertical movement
-        Vector3 targetPosition = new Vector3(player.position.x, transform.position.y, transform.position.z);
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
-    }
+    // Move towards the player
+    Vector3 direction = (player.position - transform.position).normalized; // Get direction to player
+    transform.position += direction * speed * Time.deltaTime; // Move in that direction
+}
+
 
     public static void SpawnEnemy(GameObject enemyPrefab, float screenWidth, float screenHeight)
     {
