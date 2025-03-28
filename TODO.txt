@@ -42,3 +42,33 @@
     create effect particle [prefab probably]
     check for enemy collision
     ignore player collision with own powers
+[TIM THIS IS YOU]
+Make animations work (walk, idle, punch)
+replace headbutt with punch animation
+make potions drop on ground
+let player pick up potion with [i dont care what key just pick one] if close enough
+delete ground potion when picked up
+transition to potion animations when holding potion
+make a UI element to display what potions have been swallowed (the power bar)
+    [the image will likely get replaced by Sean but the logic will stay]
+swallow potion [other key idc which (right-click?)], updating power bar and removing potion from hand
+[IF THERE IS TIME GET PAST HERE]
+use power
+    reuse punch animation for the magic
+    spawn fireball GameObject
+    give initial trajectory from character's position to cursor
+    detect collision with enemies and damage them
+    collision with wall or enemy = fireball dead
+1 FIRE = Fireball (small)
+2 FIRE = Fire Breath (big)
+[WE NEED TO DO THESE PARTS TOGETHER]
+Enemy AI:
+    Some move towards player and melee attack
+    Others keep distance and use potions [OPTIONAL]
+    Throw rocks at you??????
+Title Screen
+Cutscenes
+attack types: FIRE, LIGHTNING, ICE
+Figure out what combo attacks do
+Boss moves
+WE DO NOT HAVE TIME FOR 4 SCENES!!!!
