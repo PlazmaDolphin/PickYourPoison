@@ -28,7 +28,7 @@ public class thePotion : MonoBehaviour
         {
             //Add potion to player inventory
             PlayerMovement player = other.gameObject.GetComponent<PlayerMovement>();
-            player.AddPotion(potionType);
+            player.AddPotion(potionType1);
             //Destroy potion object
             Destroy(gameObject);
         }
