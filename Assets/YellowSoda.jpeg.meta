@@ -148,7 +148,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+<<<<<<< HEAD:Assets/enemyDevTexture.jpg.meta
+      enemyDevTexture_0: -268907359370940791
+=======
       YellowSoda_0: 4739711954106271956
+>>>>>>> 7bb25b0b6872d486eef37291c22ac70e5b8e6252:Assets/YellowSoda.jpeg.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
