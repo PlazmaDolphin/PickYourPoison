@@ -5,16 +5,16 @@ public class Enemy : MonoBehaviour
 {
     public float speed = 2f;
     public Transform target;
-    public float stopDistance = 0.5f; // Distance to maintain from player
-    public float punchDelay = 1f; // Delay before punching
+    public float stopDistance = 0.5f;
+    public float punchDelay = 1f;
 
+    private int health = 5; // Enemy health
     private bool hasReachedPlayer = false;
 
     private void Update()
     {
         if (target != null && !hasReachedPlayer)
         {
-            // Move towards the player but stop at a certain distance
             float distance = Vector2.Distance(transform.position, target.position);
             if (distance > stopDistance)
             {
@@ -23,7 +23,6 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                // Stop movement when within the stopDistance
                 hasReachedPlayer = true;
                 StartCoroutine(PunchAfterDelay());
             }
@@ -32,17 +31,14 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator PunchAfterDelay()
     {
-        // Wait for the specified punch delay
         yield return new WaitForSeconds(punchDelay);
 
-        // Perform the punch action (e.g., reduce player's health, play animation, etc.)
         if (target != null)
         {
             Debug.Log("Enemy punches the player!");
-            // Add your punch logic here (e.g., reduce player's health)
+            // Add logic to reduce player's health if needed
         }
 
-        // Reset behavior if needed, or make the enemy idle
         hasReachedPlayer = false;
     }
 
@@ -52,5 +48,22 @@ public class Enemy : MonoBehaviour
         {
             Debug.Log("Enemy collided with player!");
         }
+    }
+
+    public void TakeDamage()
+    {
+        health--; // Reduce health by 1
+        Debug.Log("Enemy hit! Remaining health: " + health);
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Enemy defeated!");
+        Destroy(gameObject); // Remove the enemy from the game
     }
 }
