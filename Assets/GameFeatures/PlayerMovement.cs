@@ -10,25 +10,22 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 movement;
     public Transform cursorLocation;
+    public Animator animator;
 
     // FIXME bounding box
-    public float minX = -8f, maxX = 8f;
-    public float minY = -4.5f, maxY = 3f;
+    public float minX = -7.91f, maxX = 8.08f;
+    public float minY = -4.96f, maxY = 2.51f;
     private bool flipped = false;
-
-    private Quaternion originalRotation; // Store the original rotation
-    private bool isRotating = false;  // To check if already rotating
 
     // Punching
     public float punchRange = 1f; // How far the punch reaches
-    public float punchDuration = 0.2f; // Duration of the punch
+    public float punchDuration = 0.5f; // Duration of the punch
     private bool isPunching = false; // Check if the player is currently punching
     public int potionType = 0; // (0 = no potion)
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>(); // Get Rigidbody2D component
-        originalRotation = transform.rotation; // Store the initial rotation of the player
     }
 
     void Update()
@@ -55,14 +52,7 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
             flipped = false;
         }
-        // Flip the character based on the horizontal movement (left or right)
-        /*if (movement.x != 0)
-        {
-            Vector3 scale = transform.localScale;
-            scale.x = movement.x > 0 ? scale.x : -scale.x; // Flip the sprite when moving left or right
-            //scale.y = 0.3069777f; // possible FIXME
-            transform.localScale = scale;
-        }*/
+
 
         // Trigger attack rotation on left-click (no mouse influence on rotation)
         if (Input.GetMouseButtonDown(0) && !isRotating)  // 0 is for left-click
@@ -75,6 +65,9 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Punch());
         }
+        //Update animation
+        animator.SetFloat("speed", movement.magnitude);
+        animator.SetBool("punching", isPunching);
     }
 
     void FixedUpdate()
@@ -88,49 +81,6 @@ public class PlayerMovement : MonoBehaviour
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, minY, maxY);
         rb.position = clampedPosition;
     }
-
-    IEnumerator RotateAndSnapBack()
-    {
-        // Mark the player as currently rotating
-        isRotating = true;
-
-        // Calculate a 45-degree rotation
-        float targetAngle = transform.localScale.x > 0 ? 45f : -45f; 
-
-        // Smoothly rotate to the target angle (45 degrees increment)
-        float elapsedTime = 0f;
-        float rotationDuration = 0.2f; // Duration to rotate to the target angle
-        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, targetAngle));
-
-        while (elapsedTime < rotationDuration)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, elapsedTime / rotationDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.rotation = targetRotation; // Ensure the final rotation is exactly the target angle (-45 or 45 degrees)
-
-        // Short wait before snapping back to original rotation
-        yield return new WaitForSeconds(0.1f);  // You can adjust this duration as needed
-
-        // Smoothly snap back to the original rotation
-        elapsedTime = 0f;
-        float snapDuration = 0.2f; // Duration for snapping back to original rotation
-
-        while (elapsedTime < snapDuration)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, elapsedTime / snapDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.rotation = originalRotation; // Ensure the rotation is exactly the original after the transition
-
-        // Mark the player as not rotating anymore
-        isRotating = false;
-    }
-
     // Punch Mechanic
     IEnumerator Punch()
     {
