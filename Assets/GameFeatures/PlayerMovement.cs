@@ -6,18 +6,16 @@ using UnityEditor.Rendering;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float rotationSpeed = 10f;
     private Rigidbody2D rb;
     private Vector2 movement;
     public Transform cursorLocation;
     public Animator animator;
     public static Transform PlayerLocation;
+    public GameObject fireballPrefab;
 
-    // You can remove these if you want the player to move freely,
-    // or adjust them dynamically based on the camera.
-    // public float minX = -7.91f, maxX = 8.08f;
-    // public float minY = -4.96f, maxY = 2.2f;
-
+    // FIXME bounding box
+    private float minX = -8f, maxX = 8f;
+    private float minY = -5f, maxY = 2.3f;
     private bool flipped = false;
 
     // Punching
@@ -60,7 +58,15 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Punch());
         }
-
+        if (Input.GetKeyDown(KeyCode.LeftShift)){
+            //spawn fireball
+            GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
+            fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
+            Physics2D.IgnoreCollision(fireball.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+            //move up a little
+            fireball.transform.position += new Vector3(0, 1f, 0);
+        }
+        //Update animation
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
     }
