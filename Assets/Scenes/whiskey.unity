@@ -748,11 +748,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 92a39e3f9ff69524f98591c7f52f460b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.75
+      value: -4.33
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 92a39e3f9ff69524f98591c7f52f460b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.58
+      value: 0.66
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 92a39e3f9ff69524f98591c7f52f460b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -828,10 +828,6 @@ MonoBehaviour:
   cursorLocation: {fileID: 605961825}
   animator: {fileID: 1604119170}
   fireballPrefab: {fileID: 2225714944725684182, guid: 77d3ec7de25a1ce4abd2b5b850a23369, type: 3}
-  minX: -5
-  maxX: 5
-  minY: -5
-  maxY: 5
   punchRange: 1
   punchDuration: 0.2
   potionType: 0
