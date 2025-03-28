@@ -14,13 +14,6 @@ public class Enemy : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform; // Finds the player if tagged correctly
 
-        if (movementBounds == null)
-        {
-            Debug.LogError("Movement Bounds not set! Please assign a BoxCollider.");
-            return;
-        }
-    if (player == null) Debug.LogError("Player not found! Make sure the Player GameObject has the 'Player' tag.");
-
         // Calculate the min and max Y bounds based on the BoxCollider
         minBounds = new Vector3(transform.position.x, movementBounds.bounds.min.y, transform.position.z);
         maxBounds = new Vector3(transform.position.x, movementBounds.bounds.max.y, transform.position.z);
@@ -28,12 +21,21 @@ public class Enemy : MonoBehaviour
 
 void Update()
 {
-    if (player == null) return; // Ensure player is assigned
+    if (player == null) return;
 
-    // Move towards the player
+    float stoppingDistance = 1.0f; // Distance where the enemy stops moving
+
+    // Get direction to player
     Vector3 direction = (player.position - transform.position).normalized;
-    transform.position += direction * speed * Time.deltaTime;
+    float distance = Vector3.Distance(player.position, transform.position);
+
+    // Move only if not within stopping distance
+    if (distance > stoppingDistance)
+    {
+        transform.position += direction * speed * Time.deltaTime;
+    }
 }
+
 
 
 
