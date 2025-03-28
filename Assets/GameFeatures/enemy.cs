@@ -2,47 +2,68 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int health = 5; // FIXME
+    public int health = 5;
     public const int WEAKNESS = 1; // Fire? Lightning? Ice?
-    public BoxCollider movementBounds; // Assign a BoxCollider in the Inspector
     public float speed = 2f; // Movement speed
-    private Vector3 minBounds, maxBounds;
-    private bool movingUp = true;
     private Transform player;
+    private Rigidbody2D rb;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player")?.transform; // Finds the player if tagged correctly
+        // Find the player using the "Player" tag
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        // Calculate the min and max Y bounds based on the BoxCollider
-        minBounds = new Vector3(transform.position.x, movementBounds.bounds.min.y, transform.position.z);
-        maxBounds = new Vector3(transform.position.x, movementBounds.bounds.max.y, transform.position.z);
+        if (player == null)
+        {
+            Debug.LogError("Player not found! Make sure the Player GameObject has the 'Player' tag.");
+        }
+
+        // Get Rigidbody2D component to apply velocity
+        rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbody2D component not found! Make sure the Enemy GameObject has a Rigidbody2D attached.");
+        }
     }
 
-void Update()
-{
-    if (player == null) return;
-
-    float stoppingDistance = 1.0f; // Distance where the enemy stops moving
-
-    // Get direction to player
-    Vector3 direction = (player.position - transform.position).normalized;
-    float distance = Vector3.Distance(player.position, transform.position);
-
-    // Move only if not within stopping distance
-    if (distance > stoppingDistance)
+    void Update()
     {
-        transform.position += direction * speed * Time.deltaTime;
+        if (player == null) return; // Ensure player exists
+
+        float stoppingDistance = 0.3f; // Distance where the enemy stops moving
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        if (distance > stoppingDistance)
+        {
+            // Calculate direction towards the player
+            Vector3 direction = (player.position - transform.position).normalized;
+
+            // Apply velocity towards the player using Rigidbody2D
+            rb.linearVelocity = new Vector2(direction.x, direction.y) * speed;
+
+            // Debug to check if movement is happening
+            Debug.Log("Enemy moving towards player: " + direction);
+        }
+        else
+        {
+            // Stop moving when within stopping distance
+            rb.linearVelocity = Vector2.zero;
+        }
     }
-}
 
-
-
-
-    public static void SpawnEnemy(GameObject enemyPrefab, float screenWidth, float screenHeight)
+    public static void SpawnEnemy(GameObject enemyPrefab)
     {
-        float randomX = Random.Range(-screenWidth / 2, screenWidth / 2);
-        float spawnY = (Random.value > 0.5f) ? screenHeight / 2 + 1 : -screenHeight / 2 - 1; // Above or below screen
+        if (Camera.main == null) return;
+
+        // Get screen bounds in world coordinates
+        float screenWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
+        float screenHeight = Camera.main.orthographicSize;
+
+        // Pick a random X position within the screen width
+        float randomX = Random.Range(-screenWidth, screenWidth);
+
+        // Spawn above or below the screen
+        float spawnY = (Random.value > 0.5f) ? screenHeight + 2 : -screenHeight - 2;
 
         Vector3 spawnPosition = new Vector3(randomX, spawnY, 0);
         Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
