@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         isRotating = true;
 
         // Calculate a 45-degree rotation
-        float targetAngle = transform.localScale.x > 0 ? -45f : 45f; // -45 for right, 45 for left (flipped)
+        float targetAngle = transform.localScale.x > 0 ? 45f : -45f; // -45 for right, 45 for left (flipped)
 
         // Smoothly rotate to the target angle (45 degrees increment)
         float elapsedTime = 0f;
