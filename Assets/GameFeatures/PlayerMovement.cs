@@ -142,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
         isPunching = false;
     }
 
-    public void AddPotion(int potiontype)
+    public void AddPotion(int potionType)
     {
 
     }

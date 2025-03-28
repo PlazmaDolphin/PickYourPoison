@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class enemy : MonoBehaviour
 {
-    public int health = 5; //definitely change this later
-    public const int WEAKNESS = 1; //Fire? Water? Earth? Wind? Light? Dark?
+    public int health = 5; // FIXME
+    public const int WEAKNESS = 1; // Fire? Water? Earth? Wind? Light? Dark?
     public BoxCollider movementBounds; // Assign a BoxCollider in the Inspector
     public float speed = 2f; // Movement speed
     private Vector3 minBounds, maxBounds;
