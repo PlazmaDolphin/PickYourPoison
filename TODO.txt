@@ -1,0 +1,44 @@
+1. Player Movement
+    Control using WASD
+        Listen to WASD keys
+        Set velocity based on direction
+    Animate character
+        Running
+        Idle
+        Running backwards?
+    Move Camera
+2. Aim with Mouse
+    Track Mouse position
+    Put cursor img on mouse
+    Face character towards mouse
+3. Make enemy [Prefab]
+    Track health
+    Track collisions
+    Enemy AI (figure out later)
+    Type weakness / (resistance?)
+    Check if dead when hit
+        groan.wav
+        IF everyone dead, win
+4. Weak Punch
+    Listen for LMB
+    Swing in cursor direction
+    Do punch animation
+    swing.wav
+    Check for collision with enemy
+        Damage enemy
+        Play enemy hurt animation
+        punchhit.wav
+5. Drink [Prefab]
+    Drink img
+    Drink Type
+    Power bar (where the combos are shown)
+    Let player pick up / hold drink
+    Drink it!
+        Check if drink is held
+        Update power bar
+        gulp.wav
+6. Use powers
+    Check power bar
+    create effect particle [prefab probably]
+    check for enemy collision
+    ignore player collision with own powers
