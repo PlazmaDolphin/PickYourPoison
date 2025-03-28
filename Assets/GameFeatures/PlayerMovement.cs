@@ -78,21 +78,21 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = movement * moveSpeed;
     }
 
-    // Simple punch mechanic (expand as needed)
-    IEnumerator Punch()
+IEnumerator Punch()
+{
+    isPunching = true;
+
+    // Punch logic
+    RaycastHit2D hit = Physics2D.Raycast(transform.position, (flipped ? Vector2.left : Vector2.right), punchRange);
+    if (hit.collider != null && hit.collider.CompareTag("Enemy"))
     {
-        isPunching = true;
-
-        // Example punch logic; you can expand this as needed
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, (flipped ? Vector2.left : Vector2.right), punchRange);
-        if (hit.collider != null)
-        {
-            Debug.Log("Punch hit: " + hit.collider.name);
-        }
-
-        yield return new WaitForSeconds(punchDuration);
-        isPunching = false;
+        Debug.Log("Punch hit: " + hit.collider.name);
+        hit.collider.GetComponent<Enemy>().TakeDamage(); // Call TakeDamage on the enemy
     }
+
+    yield return new WaitForSeconds(punchDuration);
+    isPunching = false;
+}
 
     public void AddPotion(int potionType)
     {
