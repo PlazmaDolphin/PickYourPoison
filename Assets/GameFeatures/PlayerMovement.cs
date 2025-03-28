@@ -54,7 +54,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        // Trigger punch when player presses the "Fire1" (usually left mouse or Ctrl)
         if (Input.GetKeyDown(KeyCode.Space) && !isPunching)
         {
             StartCoroutine(Punch());
