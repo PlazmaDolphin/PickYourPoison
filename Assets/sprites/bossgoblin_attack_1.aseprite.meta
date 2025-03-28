@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-guid: 1ab91e827891db041907b938ee2086c7
-=======
-guid: 0a990c476105c9b4998841ea88cbac6c
->>>>>>> cb05dcb6817eeea66a8241a9ce989b4860a1cbd1
+guid: 65cf23e2a09cb2b48896dc1d3e43ab0b
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Potion_GREYEDOUT
+  - name: bossgoblin_attack_1
     originalName: 
-    pivot: {x: 0.61538464, y: 0}
+    pivot: {x: 0.46428573, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -137,13 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 13
-      height: 14
-<<<<<<< HEAD
-    spriteID: 073008544a834b94a9e546b652b858d5
-=======
-    spriteID: 13ad8a6b249ca4c43bd6ea4389719c63
->>>>>>> cb05dcb6817eeea66a8241a9ce989b4860a1cbd1
+      width: 28
+      height: 26
+    spriteID: 66f2cd33b2397c341b4c76dc4ae097bc
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -155,25 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1607747744
-    name: Potion_GREYEDOUT
+    guid: 1510133241
+    name: bossgoblin_attack_1
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Potion_GREYEDOUT
+    - name: bossgoblin_attack_1
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 8
+        x: 3
         y: 0
-        width: 13
-        height: 14
-<<<<<<< HEAD
-      spriteId: 073008544a834b94a9e546b652b858d5
-=======
-      spriteId: 13ad8a6b249ca4c43bd6ea4389719c63
->>>>>>> cb05dcb6817eeea66a8241a9ce989b4860a1cbd1
+        width: 28
+        height: 26
+      spriteId: 66f2cd33b2397c341b4c76dc4ae097bc
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -193,4 +181,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 32, y: 32}
+  previousTextureSize: {x: 64, y: 64}

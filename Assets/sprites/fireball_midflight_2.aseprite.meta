@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-guid: 1ab91e827891db041907b938ee2086c7
-=======
-guid: 0a990c476105c9b4998841ea88cbac6c
->>>>>>> cb05dcb6817eeea66a8241a9ce989b4860a1cbd1
+guid: e8a22636fed00284db270f4ea06ddab5
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Potion_GREYEDOUT
+  - name: fireball_midflight_2
     originalName: 
-    pivot: {x: 0.61538464, y: 0}
+    pivot: {x: 0.5925926, y: -1}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -137,13 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 13
-      height: 14
-<<<<<<< HEAD
-    spriteID: 073008544a834b94a9e546b652b858d5
-=======
-    spriteID: 13ad8a6b249ca4c43bd6ea4389719c63
->>>>>>> cb05dcb6817eeea66a8241a9ce989b4860a1cbd1
+      width: 27
+      height: 10
+    spriteID: edd5032837eb2c54cbb367897925d8a4
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -155,25 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1607747744
-    name: Potion_GREYEDOUT
+    guid: 1183107217
+    name: fireball_midflight_2
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Potion_GREYEDOUT
+    - name: fireball_midflight_2
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 8
-        y: 0
-        width: 13
-        height: 14
-<<<<<<< HEAD
-      spriteId: 073008544a834b94a9e546b652b858d5
-=======
-      spriteId: 13ad8a6b249ca4c43bd6ea4389719c63
->>>>>>> cb05dcb6817eeea66a8241a9ce989b4860a1cbd1
+        x: 0
+        y: 10
+        width: 27
+        height: 10
+      spriteId: edd5032837eb2c54cbb367897925d8a4
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -193,4 +181,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 32, y: 32}
+  previousTextureSize: {x: 64, y: 32}

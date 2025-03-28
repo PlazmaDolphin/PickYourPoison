@@ -1,71 +1,69 @@
 using UnityEngine;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public int health = 5;
-    public const int WEAKNESS = 1; // Fire? Lightning? Ice?
-    public float speed = 2f; // Movement speed
-    private Transform player;
-    private Rigidbody2D rb;
+    public float speed = 2f;
+    public Transform target;
+    public float stopDistance = 0.5f;
+    public float punchDelay = 1f;
 
-    void Start()
+    private int health = 5; // Enemy health
+    private bool hasReachedPlayer = false;
+
+    private void Update()
     {
-        // Find the player using the "Player" tag
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
-
-        if (player == null)
+        if (target != null && !hasReachedPlayer)
         {
-            Debug.LogError("Player not found! Make sure the Player GameObject has the 'Player' tag.");
-        }
-
-        // Get Rigidbody2D component to apply velocity
-        rb = GetComponent<Rigidbody2D>();
-        if (rb == null)
-        {
-            Debug.LogError("Rigidbody2D component not found! Make sure the Enemy GameObject has a Rigidbody2D attached.");
+            float distance = Vector2.Distance(transform.position, target.position);
+            if (distance > stopDistance)
+            {
+                Vector2 direction = (target.position - transform.position).normalized;
+                transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            }
+            else
+            {
+                hasReachedPlayer = true;
+                StartCoroutine(PunchAfterDelay());
+            }
         }
     }
 
-    void Update()
+    private IEnumerator PunchAfterDelay()
     {
-        if (player == null) return; // Ensure player exists
+        yield return new WaitForSeconds(punchDelay);
 
-        float stoppingDistance = 0.3f; // Distance where the enemy stops moving
-        float distance = Vector3.Distance(transform.position, player.position);
-
-        if (distance > stoppingDistance)
+        if (target != null)
         {
-            // Calculate direction towards the player
-            Vector3 direction = (player.position - transform.position).normalized;
-
-            // Apply velocity towards the player using Rigidbody2D
-            rb.linearVelocity = new Vector2(direction.x, direction.y) * speed;
-
-            // Debug to check if movement is happening
-            Debug.Log("Enemy moving towards player: " + direction);
+            Debug.Log("Enemy punches the player!");
+            // Add logic to reduce player's health if needed
         }
-        else
+
+        hasReachedPlayer = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
         {
-            // Stop moving when within stopping distance
-            rb.linearVelocity = Vector2.zero;
+            Debug.Log("Enemy collided with player!");
         }
     }
 
-    public static void SpawnEnemy(GameObject enemyPrefab)
+    public void TakeDamage()
     {
-        if (Camera.main == null) return;
+        health--; // Reduce health by 1
+        Debug.Log("Enemy hit! Remaining health: " + health);
 
-        // Get screen bounds in world coordinates
-        float screenWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
-        float screenHeight = Camera.main.orthographicSize;
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
 
-        // Pick a random X position within the screen width
-        float randomX = Random.Range(-screenWidth, screenWidth);
-
-        // Spawn above or below the screen
-        float spawnY = (Random.value > 0.5f) ? screenHeight + 2 : -screenHeight - 2;
-
-        Vector3 spawnPosition = new Vector3(randomX, spawnY, 0);
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+    private void Die()
+    {
+        Debug.Log("Enemy defeated!");
+        Destroy(gameObject); // Remove the enemy from the game
     }
 }

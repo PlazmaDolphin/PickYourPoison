@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-guid: 1ab91e827891db041907b938ee2086c7
-=======
-guid: 0a990c476105c9b4998841ea88cbac6c
->>>>>>> cb05dcb6817eeea66a8241a9ce989b4860a1cbd1
+guid: 954cc4065eddbf44980afae5e026f8fe
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Potion_GREYEDOUT
+  - name: lightningBolt_hit_1
     originalName: 
-    pivot: {x: 0.61538464, y: 0}
+    pivot: {x: 0.49206352, y: -0.6333334}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -137,13 +133,13 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 13
-      height: 14
+      width: 63
+      height: 30
 <<<<<<< HEAD
-    spriteID: 073008544a834b94a9e546b652b858d5
+    spriteID: 423ebc40ac2f0f74aa474509f7c9a61d
 =======
-    spriteID: 13ad8a6b249ca4c43bd6ea4389719c63
->>>>>>> cb05dcb6817eeea66a8241a9ce989b4860a1cbd1
+    spriteID: 6e96979d81cf8e749ab6c5c04b5aaca2
+>>>>>>> e7032e074b3e43f9c405a01500a328b3e941c5ab
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -155,25 +151,25 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1607747744
-    name: Potion_GREYEDOUT
+    guid: -1863686191
+    name: lightningBolt_hit_1
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Potion_GREYEDOUT
+    - name: lightningBolt_hit_1
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 8
-        y: 0
-        width: 13
-        height: 14
+        x: 1
+        y: 19
+        width: 63
+        height: 30
 <<<<<<< HEAD
-      spriteId: 073008544a834b94a9e546b652b858d5
+      spriteId: 423ebc40ac2f0f74aa474509f7c9a61d
 =======
-      spriteId: 13ad8a6b249ca4c43bd6ea4389719c63
->>>>>>> cb05dcb6817eeea66a8241a9ce989b4860a1cbd1
+      spriteId: 6e96979d81cf8e749ab6c5c04b5aaca2
+>>>>>>> e7032e074b3e43f9c405a01500a328b3e941c5ab
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -192,5 +188,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 32, y: 32}
+  canvasSize: {x: 64, y: 64}
+  previousTextureSize: {x: 128, y: 64}
