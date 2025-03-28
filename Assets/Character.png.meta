@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9261da5e9c1935d48afd6af5aa7ffa98
+guid: 4cdb8b79ab0b3c442abf60d7594bb3eb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7597787458004966990
-    second: jackDan_0
+      213: 3427114271967980436
+    second: Character_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: jackDan_0
+      name: Character_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 262
-        height: 192
+        width: 567
+        height: 889
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 567, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e4edd413073c07960800000000000000
-      internalID: 7597787458004966990
+      spriteID: 49ba251d54e8f8f20800000000000000
+      internalID: 3427114271967980436
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 75fbb2cdbd972364c8098dc71562e493
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      jackDan_0: 7597787458004966990
+      Character_0: 3427114271967980436
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
