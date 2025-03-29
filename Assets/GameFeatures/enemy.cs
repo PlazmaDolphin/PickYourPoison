@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using System.Collections;
 
 public class Enemy : MonoBehaviour
@@ -9,24 +10,40 @@ public class Enemy : MonoBehaviour
     public heartScript theHearts; // Reference to heartScript for health updates
     public Animator animator; // Animator for enemy
 
-    private float stopDistance = 1f; // Distance at which the enemy stops punching
+    private float stopDistance = 1.5f; // Distance at which the enemy stops to punch
+    private float separationRadius = 1f; // Minimum distance between enemies to avoid overlap
     private float hitRadius = 1.5f; // Radius for attack range
     private float punchDelay = 0.3f; // Delay before punching
-    public event Action OnDeath; // Event triggered when the enemy dies
+    public event Action OnDeath; // Event triggered when enemy dies
 
-    private bool isPunching = false; // Prevents multiple punch coroutines
+    private bool isPunching = false; // Prevent multiple punch coroutines
     private bool flipped = false; // For sprite flipping
+
+    // Reference to all enemies (shared by the spawner)
+    private static List<Enemy> allEnemies = new List<Enemy>();
+
+    private void OnEnable()
+    {
+        // Add this enemy to the global list when it spawns
+        allEnemies.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        // Remove this enemy from the global list when it is destroyed
+        allEnemies.Remove(this);
+    }
 
     void Update()
     {
         if (target != null)
         {
-            float distance = Vector2.Distance(transform.position, target.position);
+            float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
-            if (distance > stopDistance)
+            if (distanceToPlayer > stopDistance)
             {
-                // Continue moving toward the player if out of range
-                MoveTowardsTarget();
+                // Move toward the player while avoiding other enemies
+                MoveTowardsTargetWithSeparation();
             }
             else
             {
@@ -42,10 +59,32 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void MoveTowardsTarget()
+    private void MoveTowardsTargetWithSeparation()
     {
-        // Move toward the player's position
-        transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        Vector2 position = transform.position;
+        Vector2 targetDirection = ((Vector2)target.position - position).normalized;
+        Vector2 separationForce = Vector2.zero;
+
+        // Separation logic: Avoid overlapping with other enemies
+        foreach (Enemy otherEnemy in allEnemies)
+        {
+            if (otherEnemy != this) // Don't check self
+            {
+                float distance = Vector2.Distance(position, otherEnemy.transform.position);
+                if (distance < separationRadius)
+                {
+                    // Calculate avoidance force
+                    Vector2 avoidDirection = (position - (Vector2)otherEnemy.transform.position).normalized;
+                    separationForce += avoidDirection / distance; // Stronger force when closer
+                }
+            }
+        }
+
+        // Combine movement toward player with separation force
+        Vector2 combinedForce = (targetDirection + separationForce).normalized;
+
+        // Apply the movement
+        transform.position += (Vector3)(combinedForce * speed * Time.deltaTime);
     }
 
     private void FlipSprite()
