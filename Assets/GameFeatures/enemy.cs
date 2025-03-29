@@ -7,8 +7,9 @@ public class Enemy : MonoBehaviour
     public Transform target; // Target to follow (usually the player)
     public float stopDistance = 0.5f; // Distance at which the enemy stops moving towards the target
     public float punchDelay = 1f; // Delay before punching the player
+    public int health = 5; // Enemy health
+    public Transform healthBar; // The health bar UI element
 
-    private int health = 5; // Enemy health
     private bool hasReachedPlayer = false; // Check if the enemy has reached the player
     private bool isPunching = false; // Prevent multiple punch coroutines from running
 
@@ -39,6 +40,12 @@ public class Enemy : MonoBehaviour
                 hasReachedPlayer = true;
                 StartCoroutine(PunchAfterDelay());
             }
+        }
+
+        // Update health bar UI scale
+        if (healthBar != null)
+        {
+            healthBar.localScale = new Vector3(health / 5f, 1f, 1f); // Scale based on remaining health
         }
     }
 
