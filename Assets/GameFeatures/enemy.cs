@@ -75,4 +75,22 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger("endClobber");
         isPunching = false; // Reset punching state
     }
+
+    public void TakeDamage(int damage = 1)
+{
+    enemyHp -= damage; // Decrease enemy health
+    Debug.Log($"Enemy took damage! Remaining HP: {enemyHp}");
+
+    if (enemyHp <= 0)
+    {
+        Die(); // Trigger death when health reaches 0
+    }
+}
+private void Die()
+{
+    Debug.Log("Enemy defeated!");
+    OnDeath?.Invoke(); // Notify listeners
+    Destroy(gameObject); // Remove enemy from scene
+}
+
 }
