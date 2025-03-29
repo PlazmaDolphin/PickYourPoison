@@ -27,7 +27,6 @@ public class powerBar : MonoBehaviour
         }
         else
         {
-            // Both slots are full, do nothing or handle accordingly
             Debug.Log("Power bar is full!");
         }
         updatePowerBar();
@@ -69,7 +68,6 @@ public class powerBar : MonoBehaviour
         Debug.Log("Using Power: " + potion1 + " " + potion2);
         if (potion1 == thePotion.FIRE && potion2 == thePotion.NONE)
         {
-            Debug.Log("Fireball Spawned!");
             //spawn fireball
             GameObject theFireball = Instantiate(fireballPrefab, playerPos.position, Quaternion.identity);
             theFireball.GetComponent<Fireball>().direction = Mathf.Atan2(cursorPos.position.y - playerPos.position.y, cursorPos.position.x - playerPos.position.x);
@@ -78,7 +76,6 @@ public class powerBar : MonoBehaviour
         //FIRE + FIRE = FIREWALL
         else if (potion1 == thePotion.FIRE && potion2 == thePotion.FIRE)
         {
-            Debug.Log("FireWall Spawned!");
             //spawn fireWall
             GameObject theFireWall = Instantiate(fireWallPrefab, playerPos.position, Quaternion.identity);
             theFireWall.GetComponent<fireWall>().direction = Mathf.Atan2(cursorPos.position.y - playerPos.position.y, cursorPos.position.x - playerPos.position.x);
@@ -89,7 +86,6 @@ public class powerBar : MonoBehaviour
         //ICE + NONE = ICE SPIKES
         else if (potion1 == thePotion.ICE && potion2 == thePotion.NONE)
         {
-            Debug.Log("Ice Spikes Spawned!");
             //spawn ice spikes
             GameObject theIceSpikes = Instantiate(fireballPrefab, playerPos.position, Quaternion.identity);
             //set iceSpike targetPos to cursorPos
