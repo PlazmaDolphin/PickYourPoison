@@ -49,18 +49,20 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Punch());
         }
-
-        // Fireball logic
-        if (Input.GetKeyDown(KeyCode.LeftShift) && potionType != 0)
-        {
-            SpawnFireball();
-            potionType = 0; // Reset potion type after use
+        if (Input.GetKeyDown(KeyCode.LeftShift) && potionType != 0){
+            //spawn fireball
+            transform.position += new Vector3(0, 1f, 0);
+            GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
+            fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
+            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
+            //move up a little
+            transform.position -= new Vector3(0, 1f, 0);
+            potionType = 0;
+            animator.SetTrigger("potionLose");
         }
-
-        // Update animation parameters
+        //Update animation
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
-        animator.SetBool("potionHeld", potionType != 0);
     }
 
     void FixedUpdate()
@@ -116,6 +118,7 @@ public class PlayerMovement : MonoBehaviour
     public void AddPotion(int potionType)
     {
         this.potionType = potionType;
-        // Add logic for using or displaying the potion if necessary
+        animator.SetTrigger("potionGet");
+        // Update animation or other logic here
     }
 }
