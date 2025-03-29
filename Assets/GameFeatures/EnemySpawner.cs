@@ -72,33 +72,34 @@ public class EnemySpawner : MonoBehaviour
     }
 
     private void SpawnEnemy()
+{
+    float spawnX = Random.Range(minX, maxX); // Random X position off-screen
+
+    // Instantiate the enemy off-screen
+    GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
+
+    if (enemy == null)
     {
-        float spawnX = Random.Range(minX, maxX); // Random X position off-screen
-
-        // Instantiate the enemy off-screen
-        GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
-
-        if (enemy == null)
-        {
-            Debug.LogError("Failed to instantiate enemyPrefab!");
-            return;
-        }
-
-        // Assign the player's Transform as the enemy's target
-        Enemy enemyScript = enemy.GetComponent<Enemy>();
-        if (enemyScript != null)
-        {
-            enemyScript.target = playerTarget; // Set the target for the enemy
-            enemyScript.OnDeath += HandleEnemyDeath; // Attach callback for enemy death
-            StartCoroutine(MoveEnemyOntoScreen(enemy)); // Move the enemy onto the screen
-        }
-        else
-        {
-            Debug.LogError("Enemy prefab is missing the Enemy script!");
-        }
-
-        activeEnemies.Add(enemy); // Add to active enemies list
+        Debug.LogError("Failed to instantiate enemyPrefab!");
+        return;
     }
+
+    // Assign the player's Transform as the enemy's target
+    Enemy enemyScript = enemy.GetComponent<Enemy>();
+    if (enemyScript != null)
+    {
+        enemyScript.target = playerTarget; // Set the target for the enemy immediately
+        enemyScript.OnDeath += HandleEnemyDeath; // Attach callback for enemy death
+        StartCoroutine(MoveEnemyOntoScreen(enemy)); // Move the enemy onto the screen
+    }
+    else
+    {
+        Debug.LogError("Enemy prefab is missing the Enemy script!");
+    }
+
+    activeEnemies.Add(enemy); // Add to active enemies list
+}
+
 
     private IEnumerator MoveEnemyOntoScreen(GameObject enemy)
     {
