@@ -36,7 +36,7 @@ public class iceSpike : MonoBehaviour
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(2);
+                enemy.TakeDamage(1);
             }
             gotHit = true;
 

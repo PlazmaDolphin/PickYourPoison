@@ -1,22 +1,32 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour
 {
     public float speed = 2f; // Movement speed
     public Transform target; // Player's Transform
-    public float stopDistance = 1.5f; // Distance to stop near the player
-    public float separationRadius = 1f; // Distance to avoid overlapping with other enemies
-    public event Action OnDeath; // Event triggered when enemy dies
+    public float stopDistance = 1.5f; // Distance at which enemies stop
+    public float separationRadius = 1f; // Minimum distance between enemies to avoid overlap
+    public int enemyHp = 3; // Number of hits required to defeat the enemy
+    public event Action OnDeath; // Event triggered when the enemy dies
+    public heartScript heartDisplay; // Reference to the heart script for enemy health UI
 
     private static List<Enemy> allEnemies = new List<Enemy>(); // Shared list of all enemies
     private bool isPunching = false; // Prevents multiple punch attempts
     private Animator animator; // Animator for enemy
 
-    void OnEnable() => allEnemies.Add(this); // Add to global list on spawn
-    void OnDisable() => allEnemies.Remove(this); // Remove from global list on death
+    void OnEnable()
+    {
+        allEnemies.Add(this); // Add enemy to global list when enabled
+        if (heartDisplay != null)
+        {
+            heartDisplay.SetMaxHp(enemyHp); // Initialize the heart display for enemy health
+        }
+    }
+
+    void OnDisable() => allEnemies.Remove(this); // Remove enemy from global list when disabled
 
     void Update()
     {
@@ -26,11 +36,11 @@ public class Enemy : MonoBehaviour
 
             if (distanceToPlayer > stopDistance)
             {
-                MoveTowardsPlayerWithSeparation();
+                MoveTowardsPlayerWithSeparation(); // Continue following the player
             }
             else if (!isPunching)
             {
-                StartCoroutine(PunchPlayer());
+                StartCoroutine(PunchPlayer()); // Punch when close to the player
             }
         }
     }
@@ -60,24 +70,41 @@ public class Enemy : MonoBehaviour
     private IEnumerator PunchPlayer()
     {
         isPunching = true;
-        animator.SetTrigger("clobber");
 
-        yield return new WaitForSeconds(0.3f); // Delay for punching
+        animator.SetTrigger("clobber"); // Trigger punch animation
+        yield return new WaitForSeconds(0.3f); // Wait before attacking
+
         if (target != null && Vector2.Distance(transform.position, target.position) <= stopDistance)
         {
             Debug.Log("Enemy punches the player!");
             target.GetComponent<PlayerMovement>()?.damagePlayer(1); // Damage the player
         }
 
-        yield return new WaitForSeconds(0.5f); // Allow punch animation to finish
-        isPunching = false;
+        yield return new WaitForSeconds(0.5f); // Wait for punch animation to finish
+        animator.SetTrigger("endClobber");
+        isPunching = false; // Reset punching state
     }
 
     public void TakeDamage(int damage = 1)
     {
-        // Trigger death if health is <= 0 (add logic for health here)
+        enemyHp -= damage; // Decrease enemy health
+        Debug.Log($"Enemy took damage! Remaining HP: {enemyHp}");
+
+        if (heartDisplay != null)
+        {
+            heartDisplay.updateHeartSprite(enemyHp); // Update the enemy's heart display
+        }
+
+        if (enemyHp <= 0)
+        {
+            Die(); // Trigger death when health reaches 0
+        }
+    }
+
+    private void Die()
+    {
         Debug.Log("Enemy defeated!");
-        OnDeath?.Invoke();
-        Destroy(gameObject);
+        OnDeath?.Invoke(); // Notify listeners
+        Destroy(gameObject); // Remove enemy from scene
     }
 }
