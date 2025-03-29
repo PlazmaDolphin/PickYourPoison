@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement; // Import the SceneManagement namespace
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -175,5 +176,12 @@ IEnumerator Punch()
     {
         theHearts.hp -= damageAmount; // Update heart script
         theHearts.updateHeartSprite(); // Update heart sprite
+        if(theHearts.hp <= 0)
+        {
+            Debug.Log("Player is dead!");
+            // show moouse
+            Cursor.visible = true;
+            SceneManager.LoadScene(2); // Load Game Over scene
+        }
     }
 }

@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
 {
     public float speed = 2f; // Movement speed
     public Transform target; // Player's Transform
-    public float stopDistance = 1.5f; // Distance at which enemies stop
+    public float stopDistance = 3f; // Distance at which enemies stop
     public float separationRadius = 1f; // Minimum distance between enemies to avoid overlap
     public int enemyHp = 3; // Number of hits required to defeat the enemy
     public event Action OnDeath; // Event triggered when the enemy dies
@@ -89,7 +89,7 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger("clobber"); // Trigger punch animation
         yield return new WaitForSeconds(0.3f); // Wait before attacking
         animator.SetTrigger("clobber2"); // Trigger second punch animation
-        if (target != null && Vector2.Distance(transform.position, target.position) <= stopDistance)
+        if (target != null && Vector2.Distance(transform.position, target.position) <= stopDistance*1.4f)
         {
             Debug.Log("Enemy punches the player!");
             target.GetComponent<PlayerMovement>()?.damagePlayer(1); // Damage the player

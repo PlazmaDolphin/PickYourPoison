@@ -1288,7 +1288,6 @@ GameObject:
   - component: {fileID: 978031045}
   - component: {fileID: 978031047}
   - component: {fileID: 978031046}
-  - component: {fileID: 978031048}
   m_Layer: 5
   m_Name: DefeatScreen
   m_TagString: Untagged
@@ -1350,18 +1349,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 978031044}
   m_CullTransparentMesh: 1
---- !u!114 &978031048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 978031044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4fd4e1ee75afbb48a82bcd96e7ef129, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1543750008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1484,7 +1471,6 @@ MonoBehaviour:
   majsfx: {fileID: 8300000, guid: 00be8865067378d4b8f4cf4079997989, type: 3}
   dmgsfx: {fileID: 8300000, guid: 538ec7f2ac04f6c43aab51f4b1d803d2, type: 3}
   goblinsfx: {fileID: 8300000, guid: fcc96245fefe9aa488d1ae170ecf0409, type: 3}
-  goblinMadsfx: {fileID: 0}
   goblinMadsfx: {fileID: 0}
 --- !u!1 &1812027787
 GameObject:
@@ -1736,7 +1722,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2096426921}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
