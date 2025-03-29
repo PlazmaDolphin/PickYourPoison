@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     public Transform target; // Target to follow (usually the player)
     public float stopDistance = 0.5f; // Distance at which the enemy stops moving towards the target
     public float punchDelay = 1f; // Delay before punching the player
-    public int health = 3; // Enemy health
+    public int health = 5; // Enemy health
     public Transform healthBar; // The health bar UI element
 
     private bool hasReachedPlayer = false; // Check if the enemy has reached the player
