@@ -28,6 +28,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnWave()
     {
+        // Cancel any pending respawn calls to prevent overlapping waves
+        CancelInvoke(nameof(SpawnWave));
+
         // Spawn a random number of enemies (1 to 3)
         int enemyCount = Random.Range(1, 4);
         currentEnemyCount = enemyCount;
@@ -46,7 +49,13 @@ public class EnemySpawner : MonoBehaviour
         float spawnX = Random.Range(minX, maxX);
 
         // Instantiate the enemy at the random position
-        GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);  // FIXME trying to access something that does not exist anymore
+        GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
+
+        if (enemy == null)
+        {
+            Debug.LogError("Failed to instantiate enemyPrefab!");
+            return; // Exit if instantiation fails
+        }
 
         // Assign the player's Transform as the enemy's target
         Enemy enemyScript = enemy.GetComponent<Enemy>();
@@ -54,6 +63,10 @@ public class EnemySpawner : MonoBehaviour
         {
             enemyScript.target = playerTarget; // Set the target for the enemy
             enemyScript.OnDeath += HandleEnemyDeath; // Attach callback for when this enemy dies
+        }
+        else
+        {
+            Debug.LogError("Enemy prefab is missing the Enemy script!");
         }
     }
 
