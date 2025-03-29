@@ -368,6 +368,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2672987577763168243, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+      propertyPath: m_Size.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2672987577763168243, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+      propertyPath: m_Size.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2672987577763168243, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431194814341472626, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1604119173}
+    - target: {fileID: 3431194814341472626, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+      propertyPath: punchDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431194814341472626, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+      propertyPath: stopDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8955633231897145111, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -377,6 +401,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+--- !u!1 &605358410 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8955633231897145111, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+  m_PrefabInstance: {fileID: 594307038}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &605961822
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,6 +1185,11 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.15764394, y: 0.32021645}
   m_EdgeRadius: 0
+--- !u!4 &1604119173 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7878350319992209165, guid: 92a39e3f9ff69524f98591c7f52f460b, type: 3}
+  m_PrefabInstance: {fileID: 1604119160}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1664536097
 GameObject:
   m_ObjectHideFlags: 0
@@ -1231,6 +1265,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664536097}
   m_CullTransparentMesh: 1
+--- !u!1 &1948844569
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1948844572}
+  - component: {fileID: 1948844571}
+  - component: {fileID: 1948844570}
+  m_Layer: 6
+  m_Name: EnemySpawner
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1948844570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948844569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af1a6f2750a48d341b050376b6bdbee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 605358410}
+  playerTarget: {fileID: 1604119173}
+  spawnY: 6
+  minX: -8
+  maxX: 8
+  respawnDelay: 2
+--- !u!114 &1948844571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948844569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2c5f46d596ead49a5978f0e117b7d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  target: {fileID: 1604119173}
+  stopDistance: 1
+  punchDelay: 2
+  health: 5
+  healthBar: {fileID: 0}
+--- !u!4 &1948844572
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948844569}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.167139, y: 0.36988223, z: -0.22246648}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1242,3 +1345,4 @@ SceneRoots:
   - {fileID: 1539383311}
   - {fileID: 930778739}
   - {fileID: 594307038}
+  - {fileID: 1948844572}
