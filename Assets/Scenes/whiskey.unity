@@ -960,6 +960,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: 92a39e3f9ff69524f98591c7f52f460b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8765234081288412734, guid: ec59d8f0083aaf74f9228ac8ec5a26dd, type: 3}
     - target: {fileID: 7878350319992209165, guid: 92a39e3f9ff69524f98591c7f52f460b, type: 3}
       propertyPath: m_LocalScale.x
       value: -8
@@ -1054,7 +1058,6 @@ MonoBehaviour:
   cursorLocation: {fileID: 605961825}
   animator: {fileID: 1604119170}
   fireballPrefab: {fileID: 2225714944725684182, guid: 77d3ec7de25a1ce4abd2b5b850a23369, type: 3}
-  theBarofPower: {fileID: 1492091511}
   punchRange: 1
   punchDuration: 0.2
   potionType: 0
@@ -1144,8 +1147,8 @@ BoxCollider2D:
   m_Offset: {x: 0.0016729087, y: 0.15720893}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.45454547, y: 0}
-    oldSize: {x: 0.22, y: 0.31}
+    pivot: {x: 0.75, y: -0.21052632}
+    oldSize: {x: 0.36, y: 0.19}
     newSize: {x: 0.22, y: 0.31}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -1187,7 +1190,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 302.73, y: -179.46}
+  m_AnchoredPosition: {x: 291.9, y: -103.1}
   m_SizeDelta: {x: 194.5323, y: 91.0706}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1664536099
