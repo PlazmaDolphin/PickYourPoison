@@ -125,7 +125,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: bartender_default
     originalName: 
-    pivot: {x: 0.5714286, y: -0.033333335}
+    pivot: {x: 0.5625, y: -0.033333335}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,7 +133,7 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 14
+      width: 16
       height: 30
     spriteID: 4955b758e80e99a4f8aa543f6be58d45
     spriteBone: []
@@ -157,9 +157,9 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 8
+        x: 7
         y: 1
-        width: 14
+        width: 16
         height: 30
       spriteId: 4955b758e80e99a4f8aa543f6be58d45
     linkedCells: []

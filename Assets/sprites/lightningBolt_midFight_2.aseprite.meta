@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: c8d47ffc163418745b1ec36d22a358e4
-=======
-guid: 7112ba1a4add6f748b15bb8238468cb1
->>>>>>> e7032e074b3e43f9c405a01500a328b3e941c5ab
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,7 +125,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: lightningBolt_midFight_2
     originalName: 
-    pivot: {x: 0.5, y: -1.5}
+    pivot: {x: 0.5, y: -1.0555556}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -139,11 +135,7 @@ ScriptedImporter:
       y: 4
       width: 64
       height: 18
-<<<<<<< HEAD
-    spriteID: bf29aed266042984e982d4992bfdb3b2
-=======
-    spriteID: 82b72ee8e14212540935241f50ca99cd
->>>>>>> e7032e074b3e43f9c405a01500a328b3e941c5ab
+    spriteID: 79d37d7ed971e3f439339c335d746f35
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -166,14 +158,10 @@ ScriptedImporter:
       additiveSortOrder: 0
       cellRect:
         x: 0
-        y: 27
+        y: 19
         width: 64
         height: 18
-<<<<<<< HEAD
-      spriteId: bf29aed266042984e982d4992bfdb3b2
-=======
-      spriteId: 82b72ee8e14212540935241f50ca99cd
->>>>>>> e7032e074b3e43f9c405a01500a328b3e941c5ab
+      spriteId: 79d37d7ed971e3f439339c335d746f35
     linkedCells: []
     parentIndex: -1
   platformSettings:
