@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour
@@ -11,12 +10,21 @@ public class Enemy : MonoBehaviour
     public float separationRadius = 1f; // Minimum distance between enemies to avoid overlap
     public int enemyHp = 3; // Number of hits required to defeat the enemy
     public event Action OnDeath; // Event triggered when the enemy dies
+    public heartScript heartDisplay; // Reference to the heart script for enemy health UI
 
     private static List<Enemy> allEnemies = new List<Enemy>(); // Shared list of all enemies
     private bool isPunching = false; // Prevents multiple punch attempts
     private Animator animator; // Animator for enemy
 
-    void OnEnable() => allEnemies.Add(this); // Add enemy to global list when enabled
+    void OnEnable()
+    {
+        allEnemies.Add(this); // Add enemy to global list when enabled
+        if (heartDisplay != null)
+        {
+            heartDisplay.SetMaxHp(enemyHp); // Initialize the heart display for enemy health
+        }
+    }
+
     void OnDisable() => allEnemies.Remove(this); // Remove enemy from global list when disabled
 
     void Update()
@@ -77,20 +85,25 @@ public class Enemy : MonoBehaviour
     }
 
     public void TakeDamage(int damage = 1)
-{
-    enemyHp -= damage; // Decrease enemy health
-    Debug.Log($"Enemy took damage! Remaining HP: {enemyHp}");
-
-    if (enemyHp <= 0)
     {
-        Die(); // Trigger death when health reaches 0
-    }
-}
-private void Die()
-{
-    Debug.Log("Enemy defeated!");
-    OnDeath?.Invoke(); // Notify listeners
-    Destroy(gameObject); // Remove enemy from scene
-}
+        enemyHp -= damage; // Decrease enemy health
+        Debug.Log($"Enemy took damage! Remaining HP: {enemyHp}");
 
+        if (heartDisplay != null)
+        {
+            heartDisplay.updateHeartSprite(enemyHp); // Update the enemy's heart display
+        }
+
+        if (enemyHp <= 0)
+        {
+            Die(); // Trigger death when health reaches 0
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Enemy defeated!");
+        OnDeath?.Invoke(); // Notify listeners
+        Destroy(gameObject); // Remove enemy from scene
+    }
 }
