@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 92736b3f972de554cb28f26feb7969b6
+guid: 97f04f106647968418ac129b3facb37c
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,9 +123,51 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: lightningBolt_hit_3
+  - name: Frame_0
     originalName: 
-    pivot: {x: 0.09090909, y: -0.22222222}
+    pivot: {x: 0.39999998, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 78
+      y: 4
+      width: 25
+      height: 26
+    spriteID: c8a1c2d34b14b0942933a6377d38caf7
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 78, y: 4}
+  - name: Frame_1
+    originalName: 
+    pivot: {x: 0.46428573, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 42
+      y: 4
+      width: 28
+      height: 26
+    spriteID: 686a1aaa7324b444fabe7544605ee44a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 42, y: 4}
+  - name: Frame_2
+    originalName: 
+    pivot: {x: 0.5, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,9 +175,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 33
-      height: 36
-    spriteID: f82f7e019a8950b4a84fe44f1969023a
+      width: 30
+      height: 27
+    spriteID: a438caf4679feaa48bdd497bf3cff241
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,24 +186,102 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: Frame_3
+    originalName: 
+    pivot: {x: 0.47368422, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 37
+      y: 39
+      width: 19
+      height: 26
+    spriteID: 40fac7196df7f2e41922bbce1bbeef4f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 37, y: 39}
+  - name: Frame_4
+    originalName: 
+    pivot: {x: 0.39999998, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 39
+      width: 25
+      height: 26
+    spriteID: ddf8636dc8fc2d8478af8a399a36591a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 39}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -1863686193
-    name: lightningBolt_hit_3
+    guid: 1306340113
+    name: Bossgoblin_attack_wholething
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: lightningBolt_hit_3
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 29
-        y: 8
-        width: 33
-        height: 36
-      spriteId: f82f7e019a8950b4a84fe44f1969023a
+        x: 6
+        y: 0
+        width: 25
+        height: 26
+      spriteId: c8a1c2d34b14b0942933a6377d38caf7
+    - name: Frame_1
+      frameIndex: 1
+      additiveSortOrder: 0
+      cellRect:
+        x: 3
+        y: 0
+        width: 28
+        height: 26
+      spriteId: 686a1aaa7324b444fabe7544605ee44a
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 1
+        y: 0
+        width: 30
+        height: 27
+      spriteId: a438caf4679feaa48bdd497bf3cff241
+    - name: Frame_3
+      frameIndex: 3
+      additiveSortOrder: 0
+      cellRect:
+        x: 7
+        y: 0
+        width: 19
+        height: 26
+      spriteId: 40fac7196df7f2e41922bbce1bbeef4f
+    - name: Frame_4
+      frameIndex: 4
+      additiveSortOrder: 0
+      cellRect:
+        x: 6
+        y: 0
+        width: 25
+        height: 26
+      spriteId: ddf8636dc8fc2d8478af8a399a36591a
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -180,5 +300,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 64, y: 64}
-  previousTextureSize: {x: 64, y: 64}
+  canvasSize: {x: 32, y: 32}
+  previousTextureSize: {x: 128, y: 128}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class Enemy : MonoBehaviour
@@ -7,19 +8,13 @@ public class Enemy : MonoBehaviour
     public Transform target; // Target to follow (usually the player)
     public float stopDistance = 0.5f; // Distance at which the enemy stops moving towards the target
     public float punchDelay = 1f; // Delay before punching the player
+    public int health = 5; // Enemy health
+    public Transform healthBar; // The health bar UI element
 
-    private int health = 5; // Enemy health
+    public event Action OnDeath; // Event to notify the spawner when the enemy dies
+
     private bool hasReachedPlayer = false; // Check if the enemy has reached the player
     private bool isPunching = false; // Prevent multiple punch coroutines from running
-
-    void Start()
-    {
-        // Dynamically assign target (player) if not set in the Inspector
-        if (target == null && GameObject.FindGameObjectWithTag("Player") != null)
-        {
-            target = GameObject.FindGameObjectWithTag("Player").transform;
-        }
-    }
 
     void Update()
     {
@@ -39,6 +34,12 @@ public class Enemy : MonoBehaviour
                 hasReachedPlayer = true;
                 StartCoroutine(PunchAfterDelay());
             }
+        }
+
+        // Update health bar UI scale
+        if (healthBar != null)
+        {
+            healthBar.localScale = new Vector3(health / 5f, 1f, 1f); // Scale based on remaining health
         }
     }
 
@@ -72,6 +73,11 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         Debug.Log("Enemy defeated!");
-        Destroy(gameObject); // Destroy the enemy object
+
+        // Notify listeners (e.g., the spawner)
+        OnDeath?.Invoke();
+
+        // Destroy the enemy object
+        Destroy(gameObject);
     }
 }
