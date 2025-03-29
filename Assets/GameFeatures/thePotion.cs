@@ -9,7 +9,7 @@ public class thePotion : MonoBehaviour
     public const int LIGHTNING = 3;
     public int potionType = NONE;
     public SpriteRenderer theSprite;
-    public Sprite fireImg;
+    public Sprite fireImg, emptyImg, lightningImg;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,12 +21,11 @@ public class thePotion : MonoBehaviour
         switch (potionType)
         {
             case FIRE:
-                theSprite.enabled = true;
                 theSprite.sprite = fireImg;
                 break;
             case NONE:
                 //set to None
-                theSprite.enabled = false;
+                theSprite.sprite = emptyImg;
                 break;
         }
     }

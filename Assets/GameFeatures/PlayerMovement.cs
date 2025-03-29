@@ -37,11 +37,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Flip sprite based on cursor location
-        bool shouldFlip = cursorLocation.position.x < transform.position.x;
-        if (shouldFlip != flipped)
-        {
-            flipped = shouldFlip;
-            transform.localScale = new Vector3(flipped ? -1*transform.localScale.x : 1*transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        if (cursorLocation.position.x < transform.position.x && !flipped ||
+            cursorLocation.position.x > transform.position.x && flipped) {
+            flipped = !flipped;
+            transform.localScale = new Vector3(-1*transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
 
         // Punch logic
