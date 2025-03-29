@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SoundEffectsPlayer : MonoBehaviour
 {
-
+    
     public AudioSource src;//the source audio that take the audio from any clip being played to play it
     public AudioClip drinksfx, atksfx, majsfx, dmgsfx, goblinsfx; //audio clip names go here
 
@@ -36,6 +36,11 @@ public class SoundEffectsPlayer : MonoBehaviour
     {
         src.clip = goblinsfx;
         src.Play();
+    }
+
+    /*public void goblinmad()
+    {
+        src.clip = sister
     }
 /*
 

@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.Tilemaps;
-using UnityEditor.Rendering;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,10 +8,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movement;
     public Transform cursorLocation;
     public Animator animator;
-    public static Transform PlayerLocation;
     public GameObject fireballPrefab;
 
-    // FIXME bounding box
+    // Bounding box for movement (optional)
     private float minX = -8f, maxX = 8f;
     private float minY = -5f, maxY = 2.3f;
     private bool flipped = false;
@@ -27,45 +24,40 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        PlayerLocation = transform; // Set static reference
     }
 
     void Update()
     {
-        // WASD movement
+        // Handle WASD movement
         movement.x = Input.GetKey(KeyCode.D) ? 1 : Input.GetKey(KeyCode.A) ? -1 : 0;
         movement.y = Input.GetKey(KeyCode.W) ? 1 : Input.GetKey(KeyCode.S) ? -1 : 0;
         if (movement.magnitude > 1)
         {
-            movement = movement.normalized;
+            movement = movement.normalized; // Normalize diagonal movement
         }
 
         // Flip sprite based on cursor location
-        if (cursorLocation.position.x < transform.position.x && !flipped)
-        {
-            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            flipped = true;
-        }
-        else if (cursorLocation.position.x >= transform.position.x && flipped)
-        {
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            flipped = false;
+        if (cursorLocation.position.x < transform.position.x && !flipped ||
+            cursorLocation.position.x > transform.position.x && flipped) {
+            flipped = !flipped;
+            transform.localScale = new Vector3(-1*transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
 
-        PlayerLocation = transform; // Update static reference
-
+        // Punch logic
         if (Input.GetKeyDown(KeyCode.Space) && !isPunching)
         {
             StartCoroutine(Punch());
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift)){
+        if (Input.GetKeyDown(KeyCode.LeftShift) && potionType != 0){
             //spawn fireball
             transform.position += new Vector3(0, 1f, 0);
             GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
             fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
-            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<CircleCollider2D>());
+            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
             //move up a little
             transform.position -= new Vector3(0, 1f, 0);
+            potionType = 0;
+            animator.SetTrigger("potionLose");
         }
         //Update animation
         animator.SetFloat("speed", movement.magnitude);
@@ -74,29 +66,58 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Apply movement freely; remove clamping if you want the player to use the full screen
+        // Apply movement
         rb.linearVelocity = movement * moveSpeed;
+
+        // Optional: Clamp player's position within bounding box
+        transform.position = new Vector3(
+            Mathf.Clamp(transform.position.x, minX, maxX),
+            Mathf.Clamp(transform.position.y, minY, maxY),
+            transform.position.z
+        );
     }
 
-IEnumerator Punch()
-{
-    isPunching = true;
-
-    // Punch logic
-    RaycastHit2D hit = Physics2D.Raycast(transform.position, (flipped ? Vector2.left : Vector2.right), punchRange);
-    if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+    IEnumerator Punch()
     {
-        Debug.Log("Punch hit: " + hit.collider.name);
-        hit.collider.GetComponent<Enemy>().TakeDamage(); // Call TakeDamage on the enemy
+        isPunching = true;
+
+        // Example punch logic with Raycast
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            flipped ? Vector2.left : Vector2.right, 
+            punchRange
+        );
+
+        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+        {
+            Debug.Log("Punch hit: " + hit.collider.name);
+            hit.collider.GetComponent<Enemy>().TakeDamage(); // Call TakeDamage on the enemy
+        }
+
+        yield return new WaitForSeconds(punchDuration);
+        isPunching = false;
     }
 
-    yield return new WaitForSeconds(punchDuration);
-    isPunching = false;
-}
+    private void SpawnFireball()
+    {
+        // Create fireball and set its direction
+        GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
+        fireball.GetComponent<fireball>().direction = Mathf.Atan2(
+            cursorLocation.position.y - transform.position.y,
+            cursorLocation.position.x - transform.position.x
+        );
+
+        // Ignore collision with the player
+        Physics2D.IgnoreCollision(
+            fireball.GetComponent<CircleCollider2D>(),
+            GetComponent<BoxCollider2D>()
+        );
+    }
 
     public void AddPotion(int potionType)
     {
         this.potionType = potionType;
+        animator.SetTrigger("potionGet");
         // Update animation or other logic here
     }
 }
