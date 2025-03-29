@@ -3,26 +3,39 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 2f;
-    public Transform target;
-    public float stopDistance = 0.5f;
-    public float punchDelay = 1f;
+    public float speed = 2f; // Movement speed
+    public Transform target; // Target to follow (usually the player)
+    public float stopDistance = 0.5f; // Distance at which the enemy stops moving towards the target
+    public float punchDelay = 1f; // Delay before punching the player
 
     private int health = 5; // Enemy health
-    private bool hasReachedPlayer = false;
+    private bool hasReachedPlayer = false; // Check if the enemy has reached the player
+    private bool isPunching = false; // Prevent multiple punch coroutines from running
 
-    private void Update()
+    void Start()
+    {
+        // Dynamically assign target (player) if not set in the Inspector
+        if (target == null && GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            target = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+    }
+
+    void Update()
     {
         if (target != null && !hasReachedPlayer)
         {
             float distance = Vector2.Distance(transform.position, target.position);
+
             if (distance > stopDistance)
             {
+                // Move towards the player
                 Vector2 direction = (target.position - transform.position).normalized;
                 transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             }
-            else
+            else if (!isPunching)
             {
+                // If the enemy reaches the player and isn't punching, start punching
                 hasReachedPlayer = true;
                 StartCoroutine(PunchAfterDelay());
             }
@@ -31,23 +44,18 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator PunchAfterDelay()
     {
+        isPunching = true; // Prevent multiple coroutines from starting
         yield return new WaitForSeconds(punchDelay);
 
         if (target != null)
         {
             Debug.Log("Enemy punches the player!");
-            // Add logic to reduce player's health if needed
+            // Add logic here to reduce the player's health or trigger an effect
         }
 
-        hasReachedPlayer = false;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Enemy collided with player!");
-        }
+        // Allow the enemy to punch again if needed
+        isPunching = false;
+        hasReachedPlayer = false; // Reset to allow movement again
     }
 
     public void TakeDamage()
@@ -64,6 +72,6 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         Debug.Log("Enemy defeated!");
-        Destroy(gameObject); // Remove the enemy from the game
+        Destroy(gameObject); // Destroy the enemy object
     }
 }
