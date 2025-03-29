@@ -25,6 +25,12 @@ public class heartScript : MonoBehaviour
             case 3:
                 theSprite.sprite = hp3;
                 break;
+            case 4:
+                theSprite.sprite = hp4;
+                break;
+            case 5:
+                theSprite.sprite = hp5;
+                break;
         }
     }
 

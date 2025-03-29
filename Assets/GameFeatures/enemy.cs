@@ -1,80 +1,82 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 2f;
-    public Transform target;
-    public heartScript theHearts;
-    public Animator animator; // Animator for enemy
-    private float stopDistance = 1f, hitRadius = 1.5f; 
-    private float punchDelay = 0.3f;
-    public event Action OnDeath; // When enemy dies?
+    public float speed = 2f; // Movement speed
+    public Transform target; // Player's Transform
+    public float stopDistance = 1.5f; // Distance to stop near the player
+    public float separationRadius = 1f; // Distance to avoid overlapping with other enemies
+    public event Action OnDeath; // Event triggered when enemy dies
 
-    private bool hasReachedPlayer = false; 
-    private bool isPunching = false; 
-    private bool flipped = false;
+    private static List<Enemy> allEnemies = new List<Enemy>(); // Shared list of all enemies
+    private bool isPunching = false; // Prevents multiple punch attempts
+    private Animator animator; // Animator for enemy
+
+    void OnEnable() => allEnemies.Add(this); // Add to global list on spawn
+    void OnDisable() => allEnemies.Remove(this); // Remove from global list on death
 
     void Update()
     {
-        if (target != null && !hasReachedPlayer)
+        if (target != null)
         {
-            float distance = Vector2.Distance(transform.position, target.position);
+            float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
-            if (distance > stopDistance)
+            if (distanceToPlayer > stopDistance)
             {
-                // Move towards the player
-                transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+                MoveTowardsPlayerWithSeparation();
             }
             else if (!isPunching)
             {
-                // If the enemy reaches the player and isn't punching, start punching
-                hasReachedPlayer = true;
-                StartCoroutine(PunchAfterDelay());
+                StartCoroutine(PunchPlayer());
             }
-            // Flip sprite based on target position
-            if (target.position.x < transform.position.x && !flipped ||
-                target.position.x > transform.position.x && flipped)
+        }
+    }
+
+    private void MoveTowardsPlayerWithSeparation()
+    {
+        Vector2 position = transform.position;
+        Vector2 moveDirection = ((Vector2)target.position - position).normalized;
+        Vector2 separationForce = Vector2.zero;
+
+        foreach (Enemy otherEnemy in allEnemies)
+        {
+            if (otherEnemy != this)
             {
-                flipped = !flipped;
-                transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, transform.localScale.z);
+                float distance = Vector2.Distance(position, otherEnemy.transform.position);
+                if (distance < separationRadius)
+                {
+                    separationForce += (position - (Vector2)otherEnemy.transform.position).normalized / distance;
+                }
             }
         }
+
+        Vector2 finalMove = (moveDirection + separationForce).normalized;
+        transform.position += (Vector3)(finalMove * speed * Time.deltaTime);
     }
 
-    private IEnumerator PunchAfterDelay()
+    private IEnumerator PunchPlayer()
     {
-        Debug.Log("Enemy is preparing to punch!");  
-        isPunching = true; // Prevent multiple coroutines from starting
-        //Do windup here
-        yield return new WaitForSeconds(punchDelay);
+        isPunching = true;
         animator.SetTrigger("clobber");
-        if (target.CompareTag("Player") && Vector2.Distance(transform.position, target.position) <= hitRadius)
+
+        yield return new WaitForSeconds(0.3f); // Delay for punching
+        if (target != null && Vector2.Distance(transform.position, target.position) <= stopDistance)
         {
-            // Trigger the punch animation
             Debug.Log("Enemy punches the player!");
-            target.GetComponent<PlayerMovement>().damagePlayer(1);
+            target.GetComponent<PlayerMovement>()?.damagePlayer(1); // Damage the player
         }
-        // Wait for the punch animation to finish (assuming it's 0.5 seconds long)
-        yield return new WaitForSeconds(0.5f); // Adjust duration based on animation length
-        animator.SetTrigger("endClobber");
+
+        yield return new WaitForSeconds(0.5f); // Allow punch animation to finish
         isPunching = false;
-        hasReachedPlayer = false; 
     }
 
-    public void TakeDamage()
+    public void TakeDamage(int damage = 1)
     {
-        theHearts.hp--;
-        theHearts.updateHeartSprite();
-        if (theHearts.hp <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void Die()
-    {
+        // Trigger death if health is <= 0 (add logic for health here)
+        Debug.Log("Enemy defeated!");
         OnDeath?.Invoke();
         Destroy(gameObject);
     }
