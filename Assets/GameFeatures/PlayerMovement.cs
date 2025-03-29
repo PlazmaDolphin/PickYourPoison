@@ -61,7 +61,25 @@ public class PlayerMovement : MonoBehaviour
             // Use power
            theBarofPower.usePower(transform, cursorLocation, GetComponent<Collider2D>());
         }
-
+        //// DEBUG KEYS
+        //F: fire potion
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            potionType = 1; // Fire potion
+            animator.SetTrigger("PotionGet");
+        }
+        //I: ice potion
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            potionType = 2; // Ice potion
+            animator.SetTrigger("PotionGet");
+        }
+        //L: lightning potion
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            potionType = 3; // Lightning potion
+            animator.SetTrigger("PotionGet");
+        }
         // Update animation
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);

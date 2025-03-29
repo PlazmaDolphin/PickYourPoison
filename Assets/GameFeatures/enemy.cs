@@ -65,9 +65,9 @@ public class Enemy : MonoBehaviour
         hasReachedPlayer = false; // Reset to allow movement again
     }
 
-    public void TakeDamage()
+    public void TakeDamage(int damageAmount=1)
     {
-        theHearts.hp--; // Update heart script
+        theHearts.hp-=damageAmount; // Update heart script
         theHearts.updateHeartSprite(); // Update heart sprite
         if (theHearts.hp <= 0)
         {
