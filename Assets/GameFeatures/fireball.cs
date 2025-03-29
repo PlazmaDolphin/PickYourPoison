@@ -28,11 +28,10 @@ public class fireball : MonoBehaviour
             Debug.Log("Fireball out of bounds");
         }
         //2. Collides with enemy
-        if (circle.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
         {
-            Destroy(gameObject);
-            //TODO: Damage enemy here
-            Debug.Log("Fireball hit enemy");
+            Debug.Log("Successful Fireball Throw: " + hit.collider.name);
+            hit.collider.GetComponent<Enemy>().TakeDamage(); // Call TakeDamage on the enemy
         }
         //3. Range limit
         if (Vector2.Distance(initPos, transform.position) > RANGE)
