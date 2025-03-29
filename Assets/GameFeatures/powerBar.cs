@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class powerBar : MonoBehaviour
 {
+    //FILL IN ALL POWER PREFABS HERE
+    public GameObject fireballPrefab;
     public int potion1 = thePotion.NONE;
     public int potion2 = thePotion.NONE;
     void Start()
@@ -24,17 +26,14 @@ public class powerBar : MonoBehaviour
             Debug.Log("Power bar is full!");
         }
     }
-    public void usePower(Transform playerPos, Transform cursorPos){
+    public void usePower(Transform playerPos, Transform cursorPos, Collider2D playerCol){
         //FIRE + NONE = FIREBALL
         if (potion1 == thePotion.FIRE && potion2 == thePotion.NONE)
         {
             //spawn fireball
-            playerPos.position += new Vector3(0, 1f, 0);
-            GameObject fireball = Instantiate(playerPos.GetComponent<PlayerMovement>().fireballPrefab, playerPos.position, Quaternion.identity);
+            GameObject fireball = Instantiate(fireballPrefab, playerPos.position, Quaternion.identity);
             fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorPos.position.y - playerPos.position.y, cursorPos.position.x - playerPos.position.x);
-            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), playerPos.GetComponent<BoxCollider2D>());
-            //move up a little
-            playerPos.position -= new Vector3(0, 1f, 0);
+            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), playerCol);
             potion1 = thePotion.NONE;
         }
         //FIRE + FIRE = FIREWALL

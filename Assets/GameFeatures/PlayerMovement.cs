@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform cursorLocation;
     public Animator animator;
     public GameObject fireballPrefab;
+    public powerBar theBarofPower;
 
     // Bounding box for movement (optional)
     private float minX = -8f, maxX = 8f;
@@ -49,7 +50,11 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Punch());
         }
         if (Input.GetKeyDown(KeyCode.LeftShift) && potionType != 0){
+            theBarofPower.AddPotion(potionType);
+            potionType = 0;
+            animator.SetTrigger("PotionLose");
             //spawn fireball
+            /*
             transform.position += new Vector3(0, 1f, 0);
             GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
             fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
@@ -57,7 +62,13 @@ public class PlayerMovement : MonoBehaviour
             //move up a little
             transform.position -= new Vector3(0, 1f, 0);
             potionType = 0;
-            animator.SetTrigger("potionLose");
+            animator.SetTrigger("PotionLose");
+            */
+        }
+        if (Input.GetKeyDown(KeyCode.Q) && potionType != 0)
+        {
+            // Use power
+            theBarofPower.usePower(transform, cursorLocation, GetComponent<Collider2D>());
         }
         //Update animation
         animator.SetFloat("speed", movement.magnitude);
@@ -117,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
     public void AddPotion(int potionType)
     {
         this.potionType = potionType;
-        animator.SetTrigger("potionGet");
+        animator.SetTrigger("PotionGet");
         // Update animation or other logic here
     }
 }
