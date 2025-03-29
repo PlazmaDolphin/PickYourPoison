@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1ab91e827891db041907b938ee2086c7
+guid: 8b6472dd9aa972543a15e5cda8977b60
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Potion_GREYEDOUT
+  - name: Frame_0
     originalName: 
-    pivot: {x: 0.61538464, y: 0}
+    pivot: {x: 0.5, y: -1.8571429}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,9 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 13
-      height: 14
-    spriteID: fa5fb4d2ff8aae54f80ab9b70c6711b4
+      width: 6
+      height: 7
+    spriteID: 2a612293ccec09b49ae96e110b078d7a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,24 +144,144 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: Frame_1
+    originalName: 
+    pivot: {x: 0.42857146, y: -2.1666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 18
+      y: 4
+      width: 7
+      height: 6
+    spriteID: 2a8c14ac62972d0449560b05befbc15c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 18, y: 4}
+  - name: Frame_2
+    originalName: 
+    pivot: {x: 0.5, y: -1.7142859}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 19
+      width: 6
+      height: 7
+    spriteID: 9ef080fc0e701c7449c17900c1f9827e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 19}
+  - name: Frame_3
+    originalName: 
+    pivot: {x: 0.5714286, y: -2.1666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 18
+      y: 18
+      width: 7
+      height: 6
+    spriteID: 8821b5ab2e236594ab14d3786bf60836
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 18, y: 18}
+  - name: Frame_4
+    originalName: 
+    pivot: {x: 0.5, y: -1.8571429}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 34
+      width: 6
+      height: 7
+    spriteID: 429260029473a0b4ca76327470b5b639
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 34}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1607747744
-    name: Potion_GREYEDOUT
+    guid: -491527771
+    name: goblinattack_flying
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Potion_GREYEDOUT
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 8
-        y: 0
-        width: 13
-        height: 14
-      spriteId: fa5fb4d2ff8aae54f80ab9b70c6711b4
+        x: 13
+        y: 13
+        width: 6
+        height: 7
+      spriteId: 2a612293ccec09b49ae96e110b078d7a
+    - name: Frame_1
+      frameIndex: 1
+      additiveSortOrder: 0
+      cellRect:
+        x: 13
+        y: 13
+        width: 7
+        height: 6
+      spriteId: 2a8c14ac62972d0449560b05befbc15c
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 13
+        y: 12
+        width: 6
+        height: 7
+      spriteId: 9ef080fc0e701c7449c17900c1f9827e
+    - name: Frame_3
+      frameIndex: 3
+      additiveSortOrder: 0
+      cellRect:
+        x: 12
+        y: 13
+        width: 7
+        height: 6
+      spriteId: 8821b5ab2e236594ab14d3786bf60836
+    - name: Frame_4
+      frameIndex: 4
+      additiveSortOrder: 0
+      cellRect:
+        x: 13
+        y: 13
+        width: 6
+        height: 7
+      spriteId: 429260029473a0b4ca76327470b5b639
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -181,4 +301,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 32, y: 32}
+  previousTextureSize: {x: 32, y: 64}

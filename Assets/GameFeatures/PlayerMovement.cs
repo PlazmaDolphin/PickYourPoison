@@ -80,26 +80,36 @@ public class PlayerMovement : MonoBehaviour
         );
     }
 
-    IEnumerator Punch()
+IEnumerator Punch()
+{
+    isPunching = true;
+
+    // Get the direction from player to cursor
+    Vector2 punchDirection = (cursorLocation.position - transform.position).normalized;
+
+    // Find all nearby enemies within a 2-unit range
+    Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 1.2f);
+
+    foreach (Collider2D enemy in hitEnemies)
     {
-        isPunching = true;
-
-        // Example punch logic with Raycast
-        RaycastHit2D hit = Physics2D.Raycast(
-            transform.position,
-            flipped ? Vector2.left : Vector2.right,
-            punchRange
-        );
-
-        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+        if (enemy.CompareTag("Enemy"))
         {
-            Debug.Log("Punch hit: " + hit.collider.name);
-            hit.collider.GetComponent<Enemy>().TakeDamage(); // Call TakeDamage on the enemy
-        }
+            // Get vector to enemy
+            Vector2 toEnemy = (enemy.transform.position - transform.position).normalized;
 
-        yield return new WaitForSeconds(punchDuration);
-        isPunching = false;
+            // Check if enemy is within 30 degrees of the punch direction
+            float angle = Vector2.Angle(punchDirection, toEnemy);
+            if (angle <= 30f)
+            {
+                Debug.Log("Punch hit: " + enemy.name);
+                enemy.GetComponent<Enemy>().TakeDamage();
+            }
+        }
     }
+
+    yield return new WaitForSeconds(punchDuration);
+    isPunching = false;
+}
 
     private void SpawnFireball()
     {
