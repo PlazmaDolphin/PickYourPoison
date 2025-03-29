@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger("PotionLose");
             */
         }
-        if (Input.GetKeyDown(KeyCode.Q) && potionType != 0)
+        if (Input.GetKeyDown(KeyCode.Q))// && potionType != 0)
         {
             // Use power
             theBarofPower.usePower(transform, cursorLocation, GetComponent<Collider2D>());

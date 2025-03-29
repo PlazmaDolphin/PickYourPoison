@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1ab91e827891db041907b938ee2086c7
+guid: 7ed9b977173e2e444bb3df5e668c9d3a
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Potion_GREYEDOUT
+  - name: inventoryicon_ice
     originalName: 
-    pivot: {x: 0.61538464, y: 0}
+    pivot: {x: 0.48, y: -0.071428575}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,9 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 13
-      height: 14
-    spriteID: ddc90b961d66d5d4686cd04a1aaf39b3
+      width: 25
+      height: 28
+    spriteID: d78de7122f4fc8548b45500c44ec46e3
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -147,21 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1607747744
-    name: Potion_GREYEDOUT
+    guid: -1879548387
+    name: inventoryicon_ice
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Potion_GREYEDOUT
+    - name: inventoryicon_ice
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 8
-        y: 0
-        width: 13
-        height: 14
-      spriteId: ddc90b961d66d5d4686cd04a1aaf39b3
+        x: 4
+        y: 2
+        width: 25
+        height: 28
+      spriteId: d78de7122f4fc8548b45500c44ec46e3
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -181,4 +181,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 32, y: 32}
+  previousTextureSize: {x: 64, y: 64}
