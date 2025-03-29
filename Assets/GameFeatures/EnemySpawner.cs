@@ -13,10 +13,9 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        // Check if all enemies are defeated before spawning the next wave
-        if (activeEnemies.Count <= 0)
+        // If no enemies are alive, spawn the next wave
+        if (activeEnemies.Count == 0)
         {
-            // Start the next wave
             SpawnWave();
         }
     }
@@ -24,25 +23,7 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnWave()
     {
         currentWave++; // Increment the wave number
-
-        int enemyCount = 0;
-
-        // Define the number of enemies per wave
-        switch (currentWave)
-        {
-            case 1:
-                enemyCount = 2; // Wave 1: Spawn 2 enemies
-                break;
-            case 2:
-                enemyCount = 3; // Wave 2: Spawn 3 enemies
-                break;
-            case 3:
-                enemyCount = 1; // Wave 3: Spawn 1 enemy
-                break;
-            default:
-                enemyCount = 1; // Default additional waves spawn 1 enemy
-                break;
-        }
+        int enemyCount = currentWave <= 3 ? currentWave + 1 : 1; // Number of enemies per wave
 
         for (int i = 0; i < enemyCount; i++)
         {
@@ -53,39 +34,16 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnEnemy()
     {
         float spawnX = Random.Range(minX, maxX); // Random X position off-screen
-
-        // Instantiate the enemy off-screen
         GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
 
-        if (enemy == null)
+        if (enemy != null)
         {
-            Debug.LogError("Failed to instantiate enemyPrefab!");
-            return;
-        }
-
-        // Assign the player's Transform as the enemy's target
-        Enemy enemyScript = enemy.GetComponent<Enemy>();
-        if (enemyScript != null)
-        {
-            enemyScript.target = playerTarget; // Set the target for the enemy
-            enemyScript.OnDeath += HandleEnemyDeath; // Attach callback for enemy death
-        }
-        else
-        {
-            Debug.LogError("Enemy prefab is missing the Enemy script!");
-        }
-
-        activeEnemies.Add(enemy); // Add to active enemies list
-    }
-
-    private void HandleEnemyDeath()
-    {
-        // This callback is triggered when an enemy dies
-        for (int i = activeEnemies.Count - 1; i >= 0; i--)
-        {
-            if (activeEnemies[i] == null)
+            Enemy enemyScript = enemy.GetComponent<Enemy>();
+            if (enemyScript != null)
             {
-                activeEnemies.RemoveAt(i); // Clean up null references
+                enemyScript.target = playerTarget; // Assign player as target
+                enemyScript.OnDeath += () => activeEnemies.Remove(enemy); // Remove from active enemies on death
+                activeEnemies.Add(enemy); // Track this enemy
             }
         }
     }
