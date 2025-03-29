@@ -125,7 +125,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: title screen
     originalName: 
-    pivot: {x: 1.0706319, y: -1.2051282}
+    pivot: {x: 0.50625, y: -0.35856575}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,8 +133,8 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 269
-      height: 156
+      width: 480
+      height: 251
     spriteID: 151908141cd10af4a8a2005e0bb25dd3
     spriteBone: []
     spriteOutline: []
@@ -157,10 +157,10 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 32
-        y: 188
-        width: 269
-        height: 156
+        x: 77
+        y: 90
+        width: 480
+        height: 251
       spriteId: 151908141cd10af4a8a2005e0bb25dd3
     linkedCells: []
     parentIndex: -1
@@ -181,4 +181,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 640, y: 360}
-  previousTextureSize: {x: 512, y: 256}
+  previousTextureSize: {x: 512, y: 512}
