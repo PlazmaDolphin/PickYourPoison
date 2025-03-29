@@ -7,11 +7,15 @@ public class Fireball : MonoBehaviour
     public const float RANGE = 10f; // Maximum range the fireball can travel
     public const float SPEED = 15f; // Speed of the fireball
 
+    public AudioSource src; //audio source variable
+    public AudioClip goblinsfx;   //sound effect for goblin taking damage
+
     void Start()
     {
         initPos = transform.position;
         // Set the rotation of the fireball based on its direction
         transform.rotation = Quaternion.Euler(0, 0, direction * Mathf.Rad2Deg);
+
     }
 
     void Update()
@@ -45,6 +49,8 @@ public class Fireball : MonoBehaviour
             if (enemy != null)
             {
                 enemy.TakeDamage();
+                src.clip = goblinsfx;
+                src.Play();
             }
 
             // Destroy the fireball after hitting an enemy
