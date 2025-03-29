@@ -109,8 +109,6 @@ public class Enemy : MonoBehaviour
     }
 }
 
-using UnityEngine;
-
 public class heartScript : MonoBehaviour
 {
     public GameObject[] hearts; // Array of heart GameObjects
