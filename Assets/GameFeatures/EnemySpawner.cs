@@ -10,14 +10,24 @@ public class EnemySpawner : MonoBehaviour
 
     private List<GameObject> activeEnemies = new List<GameObject>(); // Tracks active enemies
     private int currentWave = 0; // Tracks the current wave
+    private bool isSpawningWave = false; // Prevents multiple simultaneous wave spawns
 
     void Update()
     {
-        // If no enemies are alive, spawn the next wave
-        if (activeEnemies.Count == 0)
+        // Only spawn the next wave when all enemies are defeated
+        if (activeEnemies.Count == 0 && !isSpawningWave)
         {
-            SpawnWave();
+            StartCoroutine(StartNextWave()); // Use a coroutine for controlled wave spawning
         }
+    }
+
+    private IEnumerator StartNextWave()
+    {
+        isSpawningWave = true; // Prevent multiple wave spawns
+        yield return new WaitForSeconds(2f); // Add a delay before the next wave starts
+
+        SpawnWave(); // Call the wave spawning method
+        isSpawningWave = false; // Reset spawning flag after the wave is spawned
     }
 
     private void SpawnWave()
@@ -41,7 +51,7 @@ public class EnemySpawner : MonoBehaviour
             Enemy enemyScript = enemy.GetComponent<Enemy>();
             if (enemyScript != null)
             {
-                enemyScript.target = playerTarget; // Assign player as target
+                enemyScript.target = playerTarget; // Assign the player as the target
                 enemyScript.OnDeath += () => activeEnemies.Remove(enemy); // Remove from active enemies on death
                 activeEnemies.Add(enemy); // Track this enemy
             }
