@@ -24,6 +24,9 @@ public class PlayerMovement : MonoBehaviour
     private bool isPunching = false; // Check if the player is currently punching
     public int potionType = 0; // (0 = no potion)
 
+    public AudioSource src;
+    public AudioClip footstep;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -37,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
         if (movement.magnitude > 1)
         {
             movement = movement.normalized; // Normalize diagonal movement
+            src.clip = footstep;
+            src.Play();
         }
 
         // Flip sprite based on cursor location
