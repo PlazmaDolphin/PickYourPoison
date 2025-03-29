@@ -1,80 +1,68 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.Tilemaps;
-using UnityEditor.Rendering;
 
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float rotationSpeed = 10f;
     private Rigidbody2D rb;
     private Vector2 movement;
     public Transform cursorLocation;
+    public Animator animator;
+    public GameObject fireballPrefab;
 
-    // FIXME bounding box
-    public float minX = -8f, maxX = 8f;
-    public float minY = -4.5f, maxY = 3f;
+    // Bounding box for movement (optional)
+    private float minX = -8f, maxX = 8f;
+    private float minY = -5f, maxY = 2.3f;
     private bool flipped = false;
-
-    private Quaternion originalRotation; // Store the original rotation
-    private bool isRotating = false;  // To check if already rotating
 
     // Punching
     public float punchRange = 1f; // How far the punch reaches
-    public float punchDuration = 0.2f; // Duration of the punch
+    public float punchDuration = 0.5f; // Duration of the punch
     private bool isPunching = false; // Check if the player is currently punching
     public int potionType = 0; // (0 = no potion)
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>(); // Get Rigidbody2D component
-        originalRotation = transform.rotation; // Store the initial rotation of the player
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        // Get input for movement
-        //movement.x = Input.GetAxisRaw("Horizontal");
-        //movement.y = Input.GetAxisRaw("Vertical");
-        //WASD movement
+        // Handle WASD movement
         movement.x = Input.GetKey(KeyCode.D) ? 1 : Input.GetKey(KeyCode.A) ? -1 : 0;
         movement.y = Input.GetKey(KeyCode.W) ? 1 : Input.GetKey(KeyCode.S) ? -1 : 0;
-        // Normalize movement to ensure consistent speed in all directions
         if (movement.magnitude > 1)
         {
-            movement = movement.normalized;
-        }
-        //Flip if mouse is to left of player
-        if (cursorLocation.position.x < transform.position.x && !flipped)
-        {
-            transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
-            flipped = true;
-        }
-        else if (cursorLocation.position.x > transform.position.x && flipped)
-        {
-            transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
-            flipped = false;
-        }
-        // Flip the character based on the horizontal movement (left or right)
-        /*if (movement.x != 0)
-        {
-            Vector3 scale = transform.localScale;
-            scale.x = movement.x > 0 ? scale.x : -scale.x; // Flip the sprite when moving left or right
-            //scale.y = 0.3069777f; // possible FIXME
-            transform.localScale = scale;
-        }*/
-
-        // Trigger attack rotation on left-click (no mouse influence on rotation)
-        if (Input.GetMouseButtonDown(0) && !isRotating)  // 0 is for left-click
-        {
-            StartCoroutine(RotateAndSnapBack()); // Start the attack rotation coroutine
+            movement = movement.normalized; // Normalize diagonal movement
         }
 
-        // Trigger punch when player presses the "Fire1" (usually left mouse or Ctrl)
-        if (Input.GetButtonDown("Fire1") && !isPunching)
+        // Flip sprite based on cursor location
+        bool shouldFlip = cursorLocation.position.x < transform.position.x;
+        if (shouldFlip != flipped)
+        {
+            flipped = shouldFlip;
+            transform.localScale = new Vector3(flipped ? -1*transform.localScale.x : 1*transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        }
+
+        // Punch logic
+        if (Input.GetKeyDown(KeyCode.Space) && !isPunching)
         {
             StartCoroutine(Punch());
         }
+        if (Input.GetKeyDown(KeyCode.LeftShift) && potionType != 0){
+            //spawn fireball
+            transform.position += new Vector3(0, 1f, 0);
+            GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
+            fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
+            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
+            //move up a little
+            transform.position -= new Vector3(0, 1f, 0);
+            potionType = 0;
+            animator.SetTrigger("potionLose");
+        }
+        //Update animation
+        animator.SetFloat("speed", movement.magnitude);
+        animator.SetBool("punching", isPunching);
     }
 
     void FixedUpdate()
@@ -82,85 +70,55 @@ public class PlayerMovement : MonoBehaviour
         // Apply movement
         rb.linearVelocity = movement * moveSpeed;
 
-        // Clamp position inside the box
-        Vector2 clampedPosition = rb.position;
-        clampedPosition.x = Mathf.Clamp(clampedPosition.x, minX, maxX);
-        clampedPosition.y = Mathf.Clamp(clampedPosition.y, minY, maxY);
-        rb.position = clampedPosition;
+        // Optional: Clamp player's position within bounding box
+        transform.position = new Vector3(
+            Mathf.Clamp(transform.position.x, minX, maxX),
+            Mathf.Clamp(transform.position.y, minY, maxY),
+            transform.position.z
+        );
     }
 
-    IEnumerator RotateAndSnapBack()
-    {
-        // Mark the player as currently rotating
-        isRotating = true;
-
-        // Calculate a 45-degree rotation
-        float targetAngle = transform.localScale.x > 0 ? 45f : -45f; 
-
-        // Smoothly rotate to the target angle (45 degrees increment)
-        float elapsedTime = 0f;
-        float rotationDuration = 0.2f; // Duration to rotate to the target angle
-        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, targetAngle));
-
-        while (elapsedTime < rotationDuration)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, elapsedTime / rotationDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.rotation = targetRotation; // Ensure the final rotation is exactly the target angle (-45 or 45 degrees)
-
-        // Short wait before snapping back to original rotation
-        yield return new WaitForSeconds(0.1f);  // You can adjust this duration as needed
-
-        // Smoothly snap back to the original rotation
-        elapsedTime = 0f;
-        float snapDuration = 0.2f; // Duration for snapping back to original rotation
-
-        while (elapsedTime < snapDuration)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, elapsedTime / snapDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.rotation = originalRotation; // Ensure the rotation is exactly the original after the transition
-
-        // Mark the player as not rotating anymore
-        isRotating = false;
-    }
-
-    // Punch Mechanic
     IEnumerator Punch()
     {
         isPunching = true;
 
-        // Determine punch direction based on the current facing direction (leftmost side)
-        Vector2 punchDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;  // Punch in the direction of the leftmost side
-        Vector2 punchPosition = (Vector2)transform.position + punchDirection * punchRange;
+        // Example punch logic with Raycast
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            flipped ? Vector2.left : Vector2.right, 
+            punchRange
+        );
 
-        // Use a collider (e.g., box or circle) to check for enemies within the punch range
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, punchDirection, punchRange);
-
-        // If the ray hits something, process the hit (e.g., deal damage)
-        if (hit.collider != null)
+        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
         {
             Debug.Log("Punch hit: " + hit.collider.name);
-            // You can add logic here for dealing damage, playing animations, etc.
+            hit.collider.GetComponent<Enemy>().TakeDamage(); // Call TakeDamage on the enemy
         }
 
-        // Optionally, you can trigger a punch animation here if you have one.
-        // Example: animator.SetTrigger("Punch");
-
-        // Wait for the punch to complete
         yield return new WaitForSeconds(punchDuration);
-
         isPunching = false;
     }
+
+    private void SpawnFireball()
+    {
+        // Create fireball and set its direction
+        GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
+        fireball.GetComponent<fireball>().direction = Mathf.Atan2(
+            cursorLocation.position.y - transform.position.y,
+            cursorLocation.position.x - transform.position.x
+        );
+
+        // Ignore collision with the player
+        Physics2D.IgnoreCollision(
+            fireball.GetComponent<CircleCollider2D>(),
+            GetComponent<BoxCollider2D>()
+        );
+    }
+
     public void AddPotion(int potionType)
     {
         this.potionType = potionType;
-        //UPDATE ANIMATION HERE
+        animator.SetTrigger("potionGet");
+        // Update animation or other logic here
     }
 }

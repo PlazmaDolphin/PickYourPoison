@@ -1,55 +1,77 @@
 using UnityEngine;
-
-using UnityEngine;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public int health = 5; // FIXME
-    public const int WEAKNESS = 1; // Fire? Lightning? Ice?
-    public BoxCollider movementBounds; // Assign a BoxCollider in the Inspector
     public float speed = 2f; // Movement speed
-    private Vector3 minBounds, maxBounds;
-    private bool movingUp = true;
-    private Transform player;
+    public Transform target; // Target to follow (usually the player)
+    public float stopDistance = 0.5f; // Distance at which the enemy stops moving towards the target
+    public float punchDelay = 1f; // Delay before punching the player
+
+    private int health = 5; // Enemy health
+    private bool hasReachedPlayer = false; // Check if the enemy has reached the player
+    private bool isPunching = false; // Prevent multiple punch coroutines from running
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player")?.transform; // Finds the player if tagged correctly
-
-        if (movementBounds == null)
+        // Dynamically assign target (player) if not set in the Inspector
+        if (target == null && GameObject.FindGameObjectWithTag("Player") != null)
         {
-            Debug.LogError("Movement Bounds not set! Please assign a BoxCollider.");
-            return;
+            target = GameObject.FindGameObjectWithTag("Player").transform;
         }
-
-        // Calculate the min and max Y bounds based on the BoxCollider
-        minBounds = new Vector3(transform.position.x, movementBounds.bounds.min.y, transform.position.z);
-        maxBounds = new Vector3(transform.position.x, movementBounds.bounds.max.y, transform.position.z);
     }
 
     void Update()
     {
-        if (movementBounds == null || player == null) return;
+        if (target != null && !hasReachedPlayer)
+        {
+            float distance = Vector2.Distance(transform.position, target.position);
 
-        // Move up and down within bounds
-        float step = speed * Time.deltaTime;
-        transform.position += (movingUp ? Vector3.up : Vector3.down) * step;
-
-        // Reverse direction at bounds
-        if (transform.position.y >= maxBounds.y) movingUp = false;
-        else if (transform.position.y <= minBounds.y) movingUp = true;
-
-        // Move towards the player's X position while keeping vertical movement
-        Vector3 targetPosition = new Vector3(player.position.x, transform.position.y, transform.position.z);
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+            if (distance > stopDistance)
+            {
+                // Move towards the player
+                Vector2 direction = (target.position - transform.position).normalized;
+                transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            }
+            else if (!isPunching)
+            {
+                // If the enemy reaches the player and isn't punching, start punching
+                hasReachedPlayer = true;
+                StartCoroutine(PunchAfterDelay());
+            }
+        }
     }
 
-    public static void SpawnEnemy(GameObject enemyPrefab, float screenWidth, float screenHeight)
+    private IEnumerator PunchAfterDelay()
     {
-        float randomX = Random.Range(-screenWidth / 2, screenWidth / 2);
-        float spawnY = (Random.value > 0.5f) ? screenHeight / 2 + 1 : -screenHeight / 2 - 1; // Above or below screen
+        isPunching = true; // Prevent multiple coroutines from starting
+        yield return new WaitForSeconds(punchDelay);
 
-        Vector3 spawnPosition = new Vector3(randomX, spawnY, 0);
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        if (target != null)
+        {
+            Debug.Log("Enemy punches the player!");
+            // Add logic here to reduce the player's health or trigger an effect
+        }
+
+        // Allow the enemy to punch again if needed
+        isPunching = false;
+        hasReachedPlayer = false; // Reset to allow movement again
+    }
+
+    public void TakeDamage()
+    {
+        health--; // Reduce health by 1
+        Debug.Log("Enemy hit! Remaining health: " + health);
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Enemy defeated!");
+        Destroy(gameObject); // Destroy the enemy object
     }
 }
