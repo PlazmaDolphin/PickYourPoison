@@ -8,7 +8,7 @@ public class Fireball : MonoBehaviour
     public const float SPEED = 15f; // Speed of the fireball
 
     public AudioSource src; //audio source variable
-    public AudioClip goblinsfx;   //sound effect for goblin taking damage
+    public AudioClip fireballhit;   //sound effect for goblin taking damage
 
     void Start()
     {
@@ -49,7 +49,7 @@ public class Fireball : MonoBehaviour
             if (enemy != null)
             {
                 enemy.TakeDamage();
-                src.clip = goblinsfx;
+                src.clip = fireballhit;
                 src.Play();
             }
 
