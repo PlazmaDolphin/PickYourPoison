@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
         float spawnX = Random.Range(minX, maxX);
 
         // Instantiate the enemy at the random position
-        GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
+        new GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
 
         if (enemy == null)
         {
