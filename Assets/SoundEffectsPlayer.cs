@@ -38,7 +38,7 @@ public class SoundEffectsPlayer : MonoBehaviour
         src.Play();
     }
 
-    public void goblinmad()
+    /*public void goblinmad()
     {
         src.clip = goblinMadsfx;
     }

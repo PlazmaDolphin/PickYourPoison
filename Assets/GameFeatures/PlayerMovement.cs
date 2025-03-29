@@ -9,6 +9,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform cursorLocation;
     public Animator animator;
     public GameObject fireballPrefab;
+    public GameObject lightningBoltPrefab;
+    public powerBar theBarofPower;
+    public heartScript theHearts; // Reference to the heart script
 
     // Bounding box for movement (optional)
     private float minX = -8f, maxX = 8f;
@@ -37,11 +40,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Flip sprite based on cursor location
-        bool shouldFlip = cursorLocation.position.x < transform.position.x;
-        if (shouldFlip != flipped)
+        if (cursorLocation.position.x < transform.position.x && !flipped ||
+            cursorLocation.position.x > transform.position.x && flipped)
         {
-            flipped = shouldFlip;
-            transform.localScale = new Vector3(flipped ? -1*transform.localScale.x : 1*transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            flipped = !flipped;
+            transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
 
         // Punch logic
@@ -50,17 +53,35 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Punch());
         }
         if (Input.GetKeyDown(KeyCode.LeftShift) && potionType != 0){
-            //spawn fireball
-            transform.position += new Vector3(0, 1f, 0);
-            GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
-            fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
-            Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
-            //move up a little
-            transform.position -= new Vector3(0, 1f, 0);
+            theBarofPower.AddPotion(potionType);
             potionType = 0;
-            animator.SetTrigger("potionLose");
+            animator.SetTrigger("PotionLose");
         }
-        //Update animation
+        if (Input.GetKeyDown(KeyCode.Q))// && potionType != 0)
+        {
+            // Use power
+           theBarofPower.usePower(transform, cursorLocation, GetComponent<Collider2D>());
+        }
+        //// DEBUG KEYS
+        //F: fire potion
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            potionType = 1; // Fire potion
+            animator.SetTrigger("PotionGet");
+        }
+        //I: ice potion
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            potionType = 2; // Ice potion
+            animator.SetTrigger("PotionGet");
+        }
+        //L: lightning potion
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            potionType = 3; // Lightning potion
+            animator.SetTrigger("PotionGet");
+        }
+        // Update animation
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
     }
@@ -78,32 +99,42 @@ public class PlayerMovement : MonoBehaviour
         );
     }
 
-    IEnumerator Punch()
+IEnumerator Punch()
+{
+    isPunching = true;
+
+    // Get the direction from player to cursor
+    Vector2 punchDirection = (cursorLocation.position - transform.position).normalized;
+
+    // Find all nearby enemies within a 2-unit range
+    Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 1.2f);
+
+    foreach (Collider2D enemy in hitEnemies)
     {
-        isPunching = true;
-
-        // Example punch logic with Raycast
-        RaycastHit2D hit = Physics2D.Raycast(
-            transform.position,
-            flipped ? Vector2.left : Vector2.right, 
-            punchRange
-        );
-
-        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+        if (enemy.CompareTag("Enemy"))
         {
-            Debug.Log("Punch hit: " + hit.collider.name);
-            hit.collider.GetComponent<Enemy>().TakeDamage(); // Call TakeDamage on the enemy
-        }
+            // Get vector to enemy
+            Vector2 toEnemy = (enemy.transform.position - transform.position).normalized;
 
-        yield return new WaitForSeconds(punchDuration);
-        isPunching = false;
+            // Check if enemy is within 30 degrees of the punch direction
+            float angle = Vector2.Angle(punchDirection, toEnemy);
+            if (angle <= 30f)
+            {
+                Debug.Log("Punch hit: " + enemy.name);
+                enemy.GetComponent<Enemy>().TakeDamage();
+            }
+        }
     }
+
+    yield return new WaitForSeconds(punchDuration);
+    isPunching = false;
+}
 
     private void SpawnFireball()
     {
         // Create fireball and set its direction
         GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
-        fireball.GetComponent<fireball>().direction = Mathf.Atan2(
+        fireball.GetComponent<Fireball>().direction = Mathf.Atan2(
             cursorLocation.position.y - transform.position.y,
             cursorLocation.position.x - transform.position.x
         );
@@ -114,11 +145,30 @@ public class PlayerMovement : MonoBehaviour
             GetComponent<BoxCollider2D>()
         );
     }
+    private void SpawnLightningBolt()
+    {
+        // Create lightning bolt and set its direction
+        GameObject lightningBolt = Instantiate(lightningBoltPrefab, transform.position, Quaternion.identity);
+        lightningBolt.GetComponent<LightningBolt>().direction = Mathf.Atan2(
+            cursorLocation.position.y - transform.position.y,
+            cursorLocation.position.x - transform.position.x
+        );
+
+        // Ignore collision with the player
+        Physics2D.IgnoreCollision(
+            lightningBolt.GetComponent<CircleCollider2D>(),
+            GetComponent<BoxCollider2D>()
+        );
+    }
 
     public void AddPotion(int potionType)
     {
         this.potionType = potionType;
-        animator.SetTrigger("potionGet");
-        // Update animation or other logic here
+        animator.SetTrigger("PotionGet");
+    }
+    public void damagePlayer(int damageAmount)
+    {
+        theHearts.hp -= damageAmount; // Update heart script
+        theHearts.updateHeartSprite(); // Update heart sprite
     }
 }

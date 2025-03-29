@@ -1,23 +1,29 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
     public float speed = 2f; // Movement speed
-    public Transform target; // Target to follow (usually the player)
-    public float stopDistance = 0.5f; // Distance at which the enemy stops moving towards the target
-    public float punchDelay = 1f; // Delay before punching the player
+    public Transform target; // Player's Transform
+    public heartScript theHearts; // Reference to heartScript for health updates
+    public Animator animator; // Animator for enemy
 
-    private int health = 5; // Enemy health
-    private bool hasReachedPlayer = false; // Check if the enemy has reached the player
-    private bool isPunching = false; // Prevent multiple punch coroutines from running
+    private float stopDistance = 1f; // Distance at which the enemy stops moving toward the player
+    private float hitRadius = 1.5f; // Radius for attack range
+    private float punchDelay = 0.3f; // Delay before punching
+    public event Action OnDeath; // Event triggered when enemy dies
+
+    private bool hasReachedPlayer = false; // To check if enemy reached the player
+    private bool isPunching = false; // Prevent multiple punch coroutines
+    private bool flipped = false; // For sprite flipping
 
     void Start()
     {
-        // Dynamically assign target (player) if not set in the Inspector
-        if (target == null && GameObject.FindGameObjectWithTag("Player") != null)
+        // Ensure enemy immediately targets and moves toward the player
+        if (target == null)
         {
-            target = GameObject.FindGameObjectWithTag("Player").transform;
+            Debug.LogError("Target is not assigned to the enemy!");
         }
     }
 
@@ -30,7 +36,6 @@ public class Enemy : MonoBehaviour
             if (distance > stopDistance)
             {
                 // Move towards the player
-                Vector2 direction = (target.position - transform.position).normalized;
                 transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             }
             else if (!isPunching)
@@ -39,31 +44,45 @@ public class Enemy : MonoBehaviour
                 hasReachedPlayer = true;
                 StartCoroutine(PunchAfterDelay());
             }
+
+            // Flip sprite based on the player's position
+            if (target.position.x < transform.position.x && !flipped ||
+                target.position.x > transform.position.x && flipped)
+            {
+                flipped = !flipped;
+                transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            }
         }
     }
 
     private IEnumerator PunchAfterDelay()
     {
-        isPunching = true; // Prevent multiple coroutines from starting
+        Debug.Log("Enemy is preparing to punch!");  
+        isPunching = true; // Prevent multiple punch attempts
         yield return new WaitForSeconds(punchDelay);
 
-        if (target != null)
+        animator.SetTrigger("clobber");
+
+        // Check if player is still in attack range
+        if (target.CompareTag("Player") && Vector2.Distance(transform.position, target.position) <= hitRadius)
         {
             Debug.Log("Enemy punches the player!");
-            // Add logic here to reduce the player's health or trigger an effect
+            target.GetComponent<PlayerMovement>().damagePlayer(1); // Call player's damage method
         }
 
-        // Allow the enemy to punch again if needed
+        // Allow punch animation to finish and reset punching state
+        yield return new WaitForSeconds(0.5f); // Adjust duration based on animation
+        animator.SetTrigger("endClobber"); // Reset animation state
+
         isPunching = false;
-        hasReachedPlayer = false; // Reset to allow movement again
+        hasReachedPlayer = false; // Reset movement towards the player
     }
 
-    public void TakeDamage()
+    public void TakeDamage(int damageAmount = 1)
     {
-        health--; // Reduce health by 1
-        Debug.Log("Enemy hit! Remaining health: " + health);
-
-        if (health <= 0)
+        theHearts.hp -= damageAmount; // Update the health
+        theHearts.updateHeartSprite(); // Update the heart display
+        if (theHearts.hp <= 0)
         {
             Die();
         }
@@ -72,6 +91,8 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         Debug.Log("Enemy defeated!");
-        Destroy(gameObject); // Destroy the enemy object
+
+        OnDeath?.Invoke(); // Notify spawner or other listeners
+        Destroy(gameObject); // Remove the enemy from the scene
     }
 }
