@@ -8,9 +8,10 @@ public class Enemy : MonoBehaviour
     public Transform target;
     public heartScript theHearts;
     public Animator animator; // Animator for enemy
-    private float stopDistance = 1f, hitRadius = 1.5f; 
-    private float punchDelay = 0.3f;
+    private float stopDistance = 1f, hitRadius = 1.5f, throwDistanceMax = 7f, throwDistanceMin = 3f; 
+    private float punchDelay = 0.5f;
     public event Action OnDeath; // When enemy dies?
+    public bool rushing = true; // If the enemy is rushing
 
     private bool hasReachedPlayer = false; 
     private bool isPunching = false; 
@@ -21,17 +22,35 @@ public class Enemy : MonoBehaviour
         if (target != null && !hasReachedPlayer)
         {
             float distance = Vector2.Distance(transform.position, target.position);
-
-            if (distance > stopDistance)
-            {
-                // Move towards the player
-                transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            if (rushing){
+                if (distance > stopDistance)
+                {
+                    // Move towards the player
+                    transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+                }
+                else if (!isPunching)
+                {
+                    // If the enemy reaches the player and isn't punching, start punching
+                    hasReachedPlayer = true;
+                    StartCoroutine(PunchAfterDelay());
+                }
             }
-            else if (!isPunching)
-            {
-                // If the enemy reaches the player and isn't punching, start punching
-                hasReachedPlayer = true;
-                StartCoroutine(PunchAfterDelay());
+            else{
+                if (distance > throwDistanceMax)
+                {
+                    // Move towards the player
+                    transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+                }
+                else if (distance < throwDistanceMin && !isPunching)
+                {
+                    // If the enemy is close enough to the player, start punching
+                    //hasReachedPlayer = true;
+                    //StartCoroutine(ThrowAfterDelay());
+                }
+                else{
+                    // Back up
+                    transform.position = Vector2.MoveTowards(transform.position, target.position, -speed * Time.deltaTime);
+                }
             }
             // Flip sprite based on target position
             if (target.position.x < transform.position.x && !flipped ||
@@ -45,11 +64,12 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator PunchAfterDelay()
     {
-        Debug.Log("Enemy is preparing to punch!");  
+        Debug.Log("Enemy is preparing to punch!");
+        animator.SetTrigger("clobber");
         isPunching = true; // Prevent multiple coroutines from starting
         //Do windup here
         yield return new WaitForSeconds(punchDelay);
-        animator.SetTrigger("clobber");
+        animator.SetTrigger("clobber2");
         if (target.CompareTag("Player") && Vector2.Distance(transform.position, target.position) <= hitRadius)
         {
             // Trigger the punch animation
@@ -58,7 +78,7 @@ public class Enemy : MonoBehaviour
         }
         // Wait for the punch animation to finish (assuming it's 0.5 seconds long)
         yield return new WaitForSeconds(0.5f); // Adjust duration based on animation length
-        animator.SetTrigger("endClobber");
+        animator.SetTrigger("clobber2");
         isPunching = false;
         hasReachedPlayer = false; 
     }
