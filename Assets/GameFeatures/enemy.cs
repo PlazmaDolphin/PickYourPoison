@@ -108,3 +108,29 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject); // Remove enemy from scene
     }
 }
+
+using UnityEngine;
+
+public class heartScript : MonoBehaviour
+{
+    public GameObject[] hearts; // Array of heart GameObjects
+
+    // Set up the heart display based on the maximum health
+    public void SetMaxHp(int maxHp)
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            hearts[i].SetActive(i < maxHp); // Enable only the hearts needed for max health
+        }
+    }
+
+    // Update the heart display based on the current health
+    public void updateHeartSprite(int currentHp)
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            hearts[i].SetActive(i < currentHp); // Show hearts based on current health
+        }
+    }
+}
+
