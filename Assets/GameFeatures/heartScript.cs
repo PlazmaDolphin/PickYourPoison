@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class heartScript : MonoBehaviour
+public class EnemyHeartScript : MonoBehaviour
 {
     public SpriteRenderer theSprite;
     public Sprite hp0, hp1, hp2, hp3, hp4, hp5;
@@ -24,6 +24,12 @@ public class heartScript : MonoBehaviour
                 break;
             case 3:
                 theSprite.sprite = hp3;
+                break;
+            case 4:
+                theSprite.sprite = hp4;
+                break;
+            case 5:
+                theSprite.sprite = hp5;
                 break;
         }
     }

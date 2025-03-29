@@ -9,8 +9,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform cursorLocation;
     public Animator animator;
     public GameObject fireballPrefab;
+    public GameObject lightningBoltPrefab;
     public powerBar theBarofPower;
-    public heartScript theHearts; // Reference to the heart script
+    public EnemyHeartScript theHearts; // Reference to the heart script
 
     // Bounding box for movement (optional)
     private float minX = -8f, maxX = 8f;
@@ -22,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
     public float punchDuration = 0.5f; // Duration of the punch
     private bool isPunching = false; // Check if the player is currently punching
     public int potionType = 0; // (0 = no potion)
+
+    public AudioSource src;
+    public AudioClip footstep;
 
     void Start()
     {
@@ -36,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
         if (movement.magnitude > 1)
         {
             movement = movement.normalized; // Normalize diagonal movement
+            src.clip = footstep;
+            src.Play();
         }
 
         // Flip sprite based on cursor location
@@ -61,7 +67,25 @@ public class PlayerMovement : MonoBehaviour
             // Use power
            theBarofPower.usePower(transform, cursorLocation, GetComponent<Collider2D>());
         }
-
+        //// DEBUG KEYS
+        //F: fire potion
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            potionType = 1; // Fire potion
+            animator.SetTrigger("PotionGet");
+        }
+        //I: ice potion
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            potionType = 2; // Ice potion
+            animator.SetTrigger("PotionGet");
+        }
+        //L: lightning potion
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            potionType = 3; // Lightning potion
+            animator.SetTrigger("PotionGet");
+        }
         // Update animation
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
@@ -123,6 +147,21 @@ IEnumerator Punch()
         // Ignore collision with the player
         Physics2D.IgnoreCollision(
             fireball.GetComponent<CircleCollider2D>(),
+            GetComponent<BoxCollider2D>()
+        );
+    }
+    private void SpawnLightningBolt()
+    {
+        // Create lightning bolt and set its direction
+        GameObject lightningBolt = Instantiate(lightningBoltPrefab, transform.position, Quaternion.identity);
+        lightningBolt.GetComponent<LightningBolt>().direction = Mathf.Atan2(
+            cursorLocation.position.y - transform.position.y,
+            cursorLocation.position.x - transform.position.x
+        );
+
+        // Ignore collision with the player
+        Physics2D.IgnoreCollision(
+            lightningBolt.GetComponent<CircleCollider2D>(),
             GetComponent<BoxCollider2D>()
         );
     }

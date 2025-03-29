@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class lightningbolt: MonoBehaviour
+public class LightningBolt: MonoBehaviour
 {
     public float direction = 0f;
     public CircleCollider2D circle;
