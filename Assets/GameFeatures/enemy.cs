@@ -80,4 +80,24 @@ public class Enemy : MonoBehaviour
         OnDeath?.Invoke();
         Destroy(gameObject);
     }
+
+    private IEnumerator MoveEnemyOntoScreen(GameObject enemy)
+{
+    Vector3 startPosition = enemy.transform.position;
+    Vector3 targetPosition = new Vector3(startPosition.x, spawnY - 6f, startPosition.z); // Move down to the visible area
+
+    float elapsedTime = 0f;
+    float duration = 1f; // Time to move onto the screen
+
+    while (elapsedTime < duration)
+    {
+        enemy.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+        elapsedTime += Time.deltaTime;
+        yield return null;
+    }
+
+    // Ensure final position is accurate
+    enemy.transform.position = targetPosition;
+}
+
 }
