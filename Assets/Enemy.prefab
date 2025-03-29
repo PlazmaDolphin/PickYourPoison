@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2723448491479559621}
   - component: {fileID: 7169775639988824043}
   - component: {fileID: 2341504922409908218}
+  - component: {fileID: 5257112952587040330}
   m_Layer: 6
   m_Name: HealthBar
   m_TagString: Untagged
@@ -100,6 +101,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5257112952587040330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2263907527102062858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe8d62c5b1cafd0448dd28c628efa182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  theSprite: {fileID: 2341504922409908218}
+  hp0: {fileID: -7409857273887473460, guid: 5107514041690ba4998d23955edcd0dd, type: 3}
+  hp1: {fileID: -8470061606324045180, guid: 98abe65a8a3dc9440935da07fd209868, type: 3}
+  hp2: {fileID: 2711762600243485020, guid: 14db46257ca988246ab6156b92dced52, type: 3}
+  hp3: {fileID: -1065963965391233645, guid: 6148160b630322d4593a157b86f00125, type: 3}
+  hp4: {fileID: 0}
+  hp5: {fileID: 0}
+  hp: 3
 --- !u!1 &8955633231897145111
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,6 +134,7 @@ GameObject:
   - component: {fileID: 2672987577763168243}
   - component: {fileID: 3898831503699158124}
   - component: {fileID: 3431194814341472626}
+  - component: {fileID: 7187980916819421199}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -225,7 +247,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.1}
+  m_Offset: {x: -0.0034837537, y: 0.13057914}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5294118, y: 0}
@@ -235,7 +257,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.1, y: 0.1}
+  m_Size: {x: 0.11470892, y: 0.26334685}
   m_EdgeRadius: 0
 --- !u!50 &3898831503699158124
 Rigidbody2D:
@@ -278,7 +300,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   target: {fileID: 0}
+  theHearts: {fileID: 5257112952587040330}
+  animator: {fileID: 7187980916819421199}
   stopDistance: 0.5
   punchDelay: 1
-  health: 5
-  healthBar: {fileID: 0}
+--- !u!95 &7187980916819421199
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8955633231897145111}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 897c51402836971449d3cef64c615c6d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     public GameObject fireballPrefab;
     public powerBar theBarofPower;
+    public heartScript theHearts; // Reference to the heart script
 
     // Bounding box for movement (optional)
     private float minX = -8f, maxX = 8f;
@@ -120,5 +121,10 @@ public class PlayerMovement : MonoBehaviour
     {
         this.potionType = potionType;
         animator.SetTrigger("PotionGet");
+    }
+    public void damagePlayer(int damageAmount)
+    {
+        theHearts.hp -= damageAmount; // Update heart script
+        theHearts.updateHeartSprite(); // Update heart sprite
     }
 }
