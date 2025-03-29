@@ -9,27 +9,25 @@ public class EnemySpawner : MonoBehaviour
     public float respawnDelay = 2f; // Delay before respawning the next wave
 
     private int currentEnemyCount = 0; // Tracks how many enemies are active
+    private bool isRespawning = false; // Prevent overlapping respawn calls
 
     void Start()
     {
-        SpawnWave();
+        SpawnWave(); // Spawn the first wave of enemies
     }
 
     private void Update()
     {
-        // Check if all enemies are defeated
-        if (currentEnemyCount <= 0)
+        // Check if all enemies are defeated and no respawn is in progress
+        if (currentEnemyCount <= 0 && !isRespawning)
         {
-            // Start respawning a new wave
+            isRespawning = true; // Prevent multiple respawn calls
             Invoke(nameof(SpawnWave), respawnDelay);
         }
     }
 
     private void SpawnWave()
     {
-        // Cancel any redundant Invoke calls to prevent multiple waves spawning at once
-        CancelInvoke(nameof(SpawnWave));
-
         // Spawn a random number of enemies (1 to 3)
         int enemyCount = Random.Range(1, 4);
         currentEnemyCount = enemyCount;
@@ -38,6 +36,8 @@ public class EnemySpawner : MonoBehaviour
         {
             SpawnEnemy();
         }
+
+        isRespawning = false; // Reset respawning flag
     }
 
     private void SpawnEnemy()
@@ -52,8 +52,8 @@ public class EnemySpawner : MonoBehaviour
         Enemy enemyScript = enemy.GetComponent<Enemy>();
         if (enemyScript != null)
         {
-            enemyScript.target = playerTarget;
-            enemyScript.GetComponent<Enemy>().OnDeath += HandleEnemyDeath; // Attach callback for when this enemy dies
+            enemyScript.target = playerTarget; // Set the target for the enemy
+            enemyScript.OnDeath += HandleEnemyDeath; // Attach callback for when this enemy dies
         }
     }
 

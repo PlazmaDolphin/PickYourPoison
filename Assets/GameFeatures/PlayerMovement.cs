@@ -70,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // Apply movement
-        rb.velocity = movement * moveSpeed;
+        rb.linearVelocity = movement * moveSpeed;
 
         // Optional: Clamp player's position within bounding box
         transform.position = new Vector3(
