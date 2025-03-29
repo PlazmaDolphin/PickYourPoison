@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
@@ -7,17 +8,35 @@ public class EnemySpawner : MonoBehaviour
     public Transform playerTarget; // Player's Transform
     public float spawnY = 8f; // Off-screen spawn Y position
     public float minX = -8f, maxX = 8f; // X boundaries for spawning enemies
+    public float moveInDelay = 1f; // Delay before enemies move onto the screen
+    public float respawnDelay = 2f; // Delay before respawning the next wave
 
     private List<GameObject> activeEnemies = new List<GameObject>(); // Tracks active enemies
     private int currentWave = 0; // Tracks the current wave
+    private bool isRespawning = false; // Ensures only one wave is spawned at a time
 
-    void Update()
+    void Start()
     {
-        // Check if all enemies are defeated before spawning the next wave
-        if (activeEnemies.Count <= 0)
+        // Start with no enemies on screen
+        Invoke(nameof(SpawnWave), respawnDelay);
+    }
+
+    private void Update()
+    {
+        // Check for null enemies and remove them
+        for (int i = activeEnemies.Count - 1; i >= 0; i--)
         {
-            // Start the next wave
-            SpawnWave();
+            if (activeEnemies[i] == null)
+            {
+                activeEnemies.RemoveAt(i);
+            }
+        }
+
+        // Check if all enemies are defeated
+        if (activeEnemies.Count <= 0 && !isRespawning)
+        {
+            isRespawning = true; // Prevent additional wave spawns during respawn
+            Invoke(nameof(SpawnWave), respawnDelay);
         }
     }
 
@@ -48,6 +67,8 @@ public class EnemySpawner : MonoBehaviour
         {
             SpawnEnemy();
         }
+
+        isRespawning = false; // Reset respawn control
     }
 
     private void SpawnEnemy()
@@ -69,6 +90,7 @@ public class EnemySpawner : MonoBehaviour
         {
             enemyScript.target = playerTarget; // Set the target for the enemy
             enemyScript.OnDeath += HandleEnemyDeath; // Attach callback for enemy death
+            StartCoroutine(MoveEnemyOntoScreen(enemy)); // Move the enemy onto the screen
         }
         else
         {
@@ -78,15 +100,28 @@ public class EnemySpawner : MonoBehaviour
         activeEnemies.Add(enemy); // Add to active enemies list
     }
 
+    private IEnumerator MoveEnemyOntoScreen(GameObject enemy)
+    {
+        yield return new WaitForSeconds(moveInDelay); // Delay before moving onto the screen
+
+        // Gradually move enemy onto the screen
+        Vector3 startPosition = enemy.transform.position;
+        Vector3 targetPosition = new Vector3(startPosition.x, spawnY - 6f, startPosition.z); // Move down to visible area
+
+        float elapsedTime = 0f;
+        float duration = 1f; // Time to move onto the screen
+        while (elapsedTime < duration)
+        {
+            enemy.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        enemy.transform.position = targetPosition; // Ensure final position is accurate
+    }
+
     private void HandleEnemyDeath()
     {
-        // This callback is triggered when an enemy dies
-        for (int i = activeEnemies.Count - 1; i >= 0; i--)
-        {
-            if (activeEnemies[i] == null)
-            {
-                activeEnemies.RemoveAt(i); // Clean up null references
-            }
-        }
+        // No need to manually decrement count; Update() removes null objects
     }
 }
