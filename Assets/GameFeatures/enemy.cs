@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public Animator animator; // Animator for enemy
 
     private float stopDistance = 1.5f; // Distance at which the enemy stops to punch
-    private float separationRadius = 1f; // Minimum distance between enemies to avoid overlap
+    private float separationRadius = 0.5f; // Minimum distance between enemies to avoid overlap
     private float hitRadius = 1.5f; // Radius for attack range
     private float punchDelay = 0.3f; // Delay before punching
     public event Action OnDeath; // Event triggered when enemy dies
