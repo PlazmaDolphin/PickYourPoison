@@ -3,7 +3,7 @@ using UnityEngine;
 public class heartScript : MonoBehaviour
 {
     public SpriteRenderer theSprite;
-    public Sprite hp0, hp1, hp2, hp3;
+    public Sprite hp0, hp1, hp2, hp3, hp4, hp5;
     public int hp = 3;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
