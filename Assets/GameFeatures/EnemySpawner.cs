@@ -40,36 +40,41 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void SpawnWave()
+private void SpawnWave()
+{
+    currentWave++; // Increment the wave number
+
+    int enemyCount = 0;
+
+    // Define the number of enemies per wave
+    switch (currentWave)
     {
-        currentWave++; // Increment the wave number
-
-        int enemyCount = 0;
-
-        // Define the number of enemies per wave
-        switch (currentWave)
-        {
-            case 1:
-                enemyCount = 2; // Wave 1: Spawn 2 enemies
-                break;
-            case 2:
-                enemyCount = 3; // Wave 2: Spawn 3 enemies
-                break;
-            case 3:
-                enemyCount = 1; // Wave 3: Spawn 1 enemy
-                break;
-            default:
-                enemyCount = 1; // Default additional waves spawn 1 enemy
-                break;
-        }
-
-        for (int i = 0; i < enemyCount; i++)
-        {
-            SpawnEnemy();
-        }
-
-        isRespawning = false; // Reset respawn control
+        case 1:
+            enemyCount = 2; // Wave 1: Spawn 2 enemies
+            break;
+        case 2:
+            enemyCount = 3; // Wave 2: Spawn 3 enemies
+            break;
+        case 3:
+            enemyCount = 1; // Wave 3: Spawn 1 enemy
+            break;
+        default:
+            enemyCount = 1; // Default additional waves spawn 1 enemy
+            break;
     }
+
+    // Start a coroutine to spawn enemies with a delay
+    StartCoroutine(SpawnEnemiesWithDelay(enemyCount));
+}
+
+private IEnumerator SpawnEnemiesWithDelay(int enemyCount)
+{
+    for (int i = 0; i < enemyCount; i++)
+    {
+        SpawnEnemy(); // Spawn a single enemy
+        yield return new WaitForSeconds(0.5f); // Wait 0.5 seconds before spawning the next enemy
+    }
+}
 
     private void SpawnEnemy()
 {
