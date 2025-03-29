@@ -4,16 +4,16 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 2f; // Movement speed
-    public Transform target; // Target to follow (usually the player)
+    public float speed = 2f;
+    public Transform target;
     public heartScript theHearts;
-    public Animator animator; // Animator for the enemy
-    private float stopDistance = 1f, hitRadius = 1.5f; // Distance at which the enemy stops moving towards the target
-    private float punchDelay = 0.3f; // Delay before punching the player
-    public event Action OnDeath; // Event to notify the spawner when the enemy dies
+    public Animator animator; // Animator for enemy
+    private float stopDistance = 1f, hitRadius = 1.5f; 
+    private float punchDelay = 0.3f;
+    public event Action OnDeath; // When enemy dies?
 
-    private bool hasReachedPlayer = false; // Check if the enemy has reached the player
-    private bool isPunching = false; // Prevent multiple punch coroutines from running
+    private bool hasReachedPlayer = false; 
+    private bool isPunching = false; 
     private bool flipped = false;
 
     void Update()
@@ -49,20 +49,18 @@ public class Enemy : MonoBehaviour
         isPunching = true; // Prevent multiple coroutines from starting
         //Do windup here
         yield return new WaitForSeconds(punchDelay);
-        //if tag is player and still in range, punch
         animator.SetTrigger("clobber");
         if (target.CompareTag("Player") && Vector2.Distance(transform.position, target.position) <= hitRadius)
         {
             // Trigger the punch animation
             Debug.Log("Enemy punches the player!");
-            target.GetComponent<PlayerMovement>().damagePlayer(1); // Call the player's TakeDamage method
+            target.GetComponent<PlayerMovement>().damagePlayer(1);
         }
         // Wait for the punch animation to finish (assuming it's 0.5 seconds long)
-        yield return new WaitForSeconds(0.5f); // Adjust this duration based on your animation length
-        animator.SetTrigger("endClobber"); // Return to idle animation
-        // Allow the enemy to punch again if needed
+        yield return new WaitForSeconds(0.5f); // Adjust duration based on animation length
+        animator.SetTrigger("endClobber");
         isPunching = false;
-        hasReachedPlayer = false; // Reset to allow movement again
+        hasReachedPlayer = false; 
     }
 
     public void TakeDamage(int damageAmount=1)
@@ -77,12 +75,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("Enemy defeated!");
-
-        // Notify listeners (e.g., the spawner)
         OnDeath?.Invoke();
-
-        // Destroy the enemy object
         Destroy(gameObject);
     }
 }
