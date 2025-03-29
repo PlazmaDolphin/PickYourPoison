@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class powerBar : MonoBehaviour
 {
@@ -37,7 +37,7 @@ public class powerBar : MonoBehaviour
             Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), playerCol);
             potion1 = thePotion.NONE;
         }
-        //FIRE + FIRE = FIREWALL
+        //FIRE + FIRE = FIREWALL   
 =======
     public void usePower(Transform playerPos, Transform cursorPos){
 >>>>>>> 7cea9f50cdb951cf32e8a338572a406eceb8d7fd
@@ -46,5 +46,5 @@ public class powerBar : MonoBehaviour
     void Update()
     {
         
-    }
-}
+    }   
+}   */

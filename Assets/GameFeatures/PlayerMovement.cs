@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform cursorLocation;
     public Animator animator;
     public GameObject fireballPrefab;
-    public powerBar theBarofPower;
+    //public powerBar theBarofPower;
 
     // Bounding box for movement (optional)
     private float minX = -8f, maxX = 8f;
@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Punch());
         }
         if (Input.GetKeyDown(KeyCode.LeftShift) && potionType != 0){
-            theBarofPower.AddPotion(potionType);
+            //theBarofPower.AddPotion(potionType);
             potionType = 0;
             animator.SetTrigger("PotionLose");
             //spawn fireball
@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q) && potionType != 0)
         {
             // Use power
-            theBarofPower.usePower(transform, cursorLocation, GetComponent<Collider2D>());
+           // theBarofPower.usePower(transform, cursorLocation, GetComponent<Collider2D>());
         }
 
         // Update animation
