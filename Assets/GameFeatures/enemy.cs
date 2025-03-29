@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class Enemy : MonoBehaviour
@@ -10,17 +11,10 @@ public class Enemy : MonoBehaviour
     public int health = 5; // Enemy health
     public Transform healthBar; // The health bar UI element
 
+    public event Action OnDeath; // Event to notify the spawner when the enemy dies
+
     private bool hasReachedPlayer = false; // Check if the enemy has reached the player
     private bool isPunching = false; // Prevent multiple punch coroutines from running
-
-    void Start()
-    {
-        // Dynamically assign target (player) if not set in the Inspector
-        if (target == null && GameObject.FindGameObjectWithTag("Player") != null)
-        {
-            target = GameObject.FindGameObjectWithTag("Player").transform;
-        }
-    }
 
     void Update()
     {
@@ -79,6 +73,11 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         Debug.Log("Enemy defeated!");
-        Destroy(gameObject); // Destroy the enemy object
+
+        // Notify listeners (e.g., the spawner)
+        OnDeath?.Invoke();
+
+        // Destroy the enemy object
+        Destroy(gameObject);
     }
 }
