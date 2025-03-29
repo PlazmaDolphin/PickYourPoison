@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 954cc4065eddbf44980afae5e026f8fe
+guid: 8b6472dd9aa972543a15e5cda8977b60
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: lightningBolt_hit_1
+  - name: Frame_0
     originalName: 
-    pivot: {x: 0.49206352, y: -0.6333334}
+    pivot: {x: 0.5, y: -1.8571429}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,13 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 63
-      height: 30
-<<<<<<< HEAD
-    spriteID: 46aa5ce6d3dcca44a850510cab5da0c9
-=======
-    spriteID: 27ed1665dcc173a408fb8aaa0cc28b9c
->>>>>>> 4b240db70c4a8e422531c6a04b0d81596339e18e
+      width: 6
+      height: 7
+    spriteID: 3c1c1ffd9dc9e954ea8f1a7cb8891a5a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -148,28 +144,144 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: Frame_1
+    originalName: 
+    pivot: {x: 0.42857146, y: -2.1666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 18
+      y: 4
+      width: 7
+      height: 6
+    spriteID: f23cc906237606543ade315b1fc25f8d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 18, y: 4}
+  - name: Frame_2
+    originalName: 
+    pivot: {x: 0.5, y: -1.7142859}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 19
+      width: 6
+      height: 7
+    spriteID: 9c11984d6b175cf4bbc554e01a0e5262
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 19}
+  - name: Frame_3
+    originalName: 
+    pivot: {x: 0.5714286, y: -2.1666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 18
+      y: 18
+      width: 7
+      height: 6
+    spriteID: 4628258fd5baca044bf623e00e1e75ee
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 18, y: 18}
+  - name: Frame_4
+    originalName: 
+    pivot: {x: 0.5, y: -1.8571429}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 34
+      width: 6
+      height: 7
+    spriteID: cd5435b2cfcbd6b4d81e6d2de93f708e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 34}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -1863686191
-    name: lightningBolt_hit_1
+    guid: -491527771
+    name: goblinattack_flying
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: lightningBolt_hit_1
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 1
-        y: 19
-        width: 63
-        height: 30
-<<<<<<< HEAD
-      spriteId: 46aa5ce6d3dcca44a850510cab5da0c9
-=======
-      spriteId: 27ed1665dcc173a408fb8aaa0cc28b9c
->>>>>>> 4b240db70c4a8e422531c6a04b0d81596339e18e
+        x: 13
+        y: 13
+        width: 6
+        height: 7
+      spriteId: 3c1c1ffd9dc9e954ea8f1a7cb8891a5a
+    - name: Frame_1
+      frameIndex: 1
+      additiveSortOrder: 0
+      cellRect:
+        x: 13
+        y: 13
+        width: 7
+        height: 6
+      spriteId: f23cc906237606543ade315b1fc25f8d
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 13
+        y: 12
+        width: 6
+        height: 7
+      spriteId: 9c11984d6b175cf4bbc554e01a0e5262
+    - name: Frame_3
+      frameIndex: 3
+      additiveSortOrder: 0
+      cellRect:
+        x: 12
+        y: 13
+        width: 7
+        height: 6
+      spriteId: 4628258fd5baca044bf623e00e1e75ee
+    - name: Frame_4
+      frameIndex: 4
+      additiveSortOrder: 0
+      cellRect:
+        x: 13
+        y: 13
+        width: 6
+        height: 7
+      spriteId: cd5435b2cfcbd6b4d81e6d2de93f708e
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -188,5 +300,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 64, y: 64}
-  previousTextureSize: {x: 128, y: 64}
+  canvasSize: {x: 32, y: 32}
+  previousTextureSize: {x: 32, y: 64}
