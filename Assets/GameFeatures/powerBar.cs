@@ -87,10 +87,9 @@ public class powerBar : MonoBehaviour
         else if (potion1 == thePotion.ICE && potion2 == thePotion.NONE)
         {
             //spawn ice spikes
-            GameObject theIceSpikes = Instantiate(fireballPrefab, playerPos.position, Quaternion.identity);
-            //set iceSpike targetPos to cursorPos
-            theIceSpikes.GetComponent<iceSpike>().targetPos = cursorPos.position;
-            Physics2D.IgnoreCollision(theIceSpikes.GetComponent<CircleCollider2D>(), playerCol);
+            GameObject theIceSpikes = Instantiate(iceSpikePrefab, cursorPos.position, Quaternion.identity);
+            Debug.Log("Ice Spike Target: " + cursorPos.position);
+            Physics2D.IgnoreCollision(theIceSpikes.GetComponent<BoxCollider2D>(), playerCol);
         }
         potion1 = thePotion.NONE;
         potion2 = thePotion.NONE;
