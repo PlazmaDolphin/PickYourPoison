@@ -802,6 +802,7 @@ MonoBehaviour:
   target: {fileID: 1604119173}
   theHearts: {fileID: 0}
   animator: {fileID: 0}
+  rushing: 1
 --- !u!4 &1143223968
 Transform:
   m_ObjectHideFlags: 0
@@ -927,6 +928,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireballPrefab: {fileID: 2225714944725684182, guid: 77d3ec7de25a1ce4abd2b5b850a23369, type: 3}
   fireWallPrefab: {fileID: 9137525758601091481, guid: 8ea747c0035bb764ab1dc8f46c9824c7, type: 3}
+  iceSpikePrefab: {fileID: 0}
   icon1: {fileID: 1492091512}
   icon2: {fileID: 728095520}
   emptyImg: {fileID: 0}
@@ -1536,8 +1538,6 @@ MonoBehaviour:
   spawnY: 6
   minX: -8
   maxX: 8
-  moveInDelay: 1
-  respawnDelay: 2
 --- !u!114 &1948844571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1554,6 +1554,7 @@ MonoBehaviour:
   target: {fileID: 0}
   theHearts: {fileID: 0}
   animator: {fileID: 0}
+  rushing: 1
 --- !u!4 &1948844572
 Transform:
   m_ObjectHideFlags: 0

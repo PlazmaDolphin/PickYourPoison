@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class powerBar : MonoBehaviour
 {
     //FILL IN ALL POWER PREFABS HERE
-    public GameObject fireballPrefab, fireWallPrefab;
+    public GameObject fireballPrefab, fireWallPrefab, iceSpikePrefab;
     public Image icon1, icon2;
     public Sprite emptyImg, fireImg, iceImg, lightningImg;
     public int potion1 = thePotion.NONE;
@@ -85,6 +85,16 @@ public class powerBar : MonoBehaviour
             Physics2D.IgnoreCollision(theFireWall.GetComponent<BoxCollider2D>(), playerCol);
             //Move forward by 1 unit
             theFireWall.transform.position += 2* new Vector3(Mathf.Cos(theFireWall.GetComponent<fireWall>().direction), Mathf.Sin(theFireWall.GetComponent<fireWall>().direction), 0);
+        }
+        //ICE + NONE = ICE SPIKES
+        else if (potion1 == thePotion.ICE && potion2 == thePotion.NONE)
+        {
+            Debug.Log("Ice Spikes Spawned!");
+            //spawn ice spikes
+            GameObject theIceSpikes = Instantiate(fireballPrefab, playerPos.position, Quaternion.identity);
+            //set iceSpike targetPos to cursorPos
+            theIceSpikes.GetComponent<iceSpike>().targetPos = cursorPos.position;
+            Physics2D.IgnoreCollision(theIceSpikes.GetComponent<CircleCollider2D>(), playerCol);
         }
         potion1 = thePotion.NONE;
         potion2 = thePotion.NONE;
