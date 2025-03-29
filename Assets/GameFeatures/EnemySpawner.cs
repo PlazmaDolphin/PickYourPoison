@@ -39,48 +39,55 @@ public class EnemySpawner : MonoBehaviour
         isSpawningWave = false; // Reset spawning control
     }
 
-    private void SpawnEnemy()
+   private void SpawnEnemy()
+{
+    float spawnX = Random.Range(minX, maxX); // Random X position off-screen
+    GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
+
+    if (enemy == null)
     {
-        float spawnX = Random.Range(minX, maxX); // Random X position off-screen
-        GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
-
-        if (enemy == null)
-        {
-            Debug.LogError("Failed to instantiate enemyPrefab!");
-            return;
-        }
-
-        // Assign the player's Transform as the enemy's target
-        Enemy enemyScript = enemy.GetComponent<Enemy>();
-        if (enemyScript != null)
-        {
-            enemyScript.target = playerTarget; // Set the target for the enemy
-            enemyScript.OnDeath += () => activeEnemies.Remove(enemy); // Remove from active enemies on death
-            activeEnemies.Add(enemy); // Track this enemy
-        }
-        else
-        {
-            Debug.LogError("Enemy prefab is missing the Enemy script!");
-        }
+        Debug.LogError("Failed to instantiate enemyPrefab!");
+        return;
     }
 
-    private IEnumerator MoveEnemyOntoScreen(GameObject enemy)
+    Enemy enemyScript = enemy.GetComponent<Enemy>();
+    if (enemyScript != null)
+    {
+        enemyScript.target = playerTarget; // Set the target for the enemy
+        enemyScript.OnDeath += () => activeEnemies.Remove(enemy); // Remove from active enemies on death
+        activeEnemies.Add(enemy); // Add to active enemies list
+
+        // Start moving the enemy onto the screen
+        StartCoroutine(MoveEnemyOntoScreen(enemy));
+    }
+    else
+    {
+        Debug.LogError("Enemy prefab is missing the Enemy script!");
+    }
+}
+
+
+private IEnumerator MoveEnemyOntoScreen(GameObject enemy)
 {
     Vector3 startPosition = enemy.transform.position;
-    Vector3 targetPosition = new Vector3(startPosition.x, spawnY - 6f, startPosition.z); // Move down to the visible area
+    Vector3 targetPosition = new Vector3(startPosition.x, spawnY - 6f, startPosition.z); // Move down to visible area
+
+    Debug.Log($"Moving enemy from {startPosition} to {targetPosition}");
 
     float elapsedTime = 0f;
-    float duration = 1f; // Time to move onto the screen
+    float duration = 1.5f; // Adjust duration as needed
 
     while (elapsedTime < duration)
     {
+        // Smoothly interpolate position
         enemy.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
         elapsedTime += Time.deltaTime;
         yield return null;
     }
 
-    // Ensure final position is accurate
+    // Ensure final position is correct
     enemy.transform.position = targetPosition;
+    Debug.Log("Enemy moved onto the screen!");
 }
 
 }
