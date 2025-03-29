@@ -1,98 +1,134 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour
 {
     public float speed = 2f; // Movement speed
     public Transform target; // Player's Transform
-    public heartScript theHearts; // Reference to heartScript for health updates
-    public Animator animator; // Animator for enemy
+    public float stopDistance = 1.5f; // Distance at which enemies stop
+    public float separationRadius = 1f; // Minimum distance between enemies to avoid overlap
+    public int enemyHp = 3; // Number of hits required to defeat the enemy
+    public event Action OnDeath; // Event triggered when the enemy dies
+    public heartScript heartDisplay; // Reference to the heart script for enemy health UI
 
-    private float stopDistance = 1f; // Distance at which the enemy stops moving toward the player
-    private float hitRadius = 1.5f; // Radius for attack range
-    private float punchDelay = 0.3f; // Delay before punching
-    public event Action OnDeath; // Event triggered when enemy dies
+    private static List<Enemy> allEnemies = new List<Enemy>(); // Shared list of all enemies
+    private bool isPunching = false; // Prevents multiple punch attempts
+    private Animator animator; // Animator for enemy
 
-    private bool hasReachedPlayer = false; // To check if enemy reached the player
-    private bool isPunching = false; // Prevent multiple punch coroutines
-    private bool flipped = false; // For sprite flipping
-
-    void Start()
+    void OnEnable()
     {
-        // Ensure enemy immediately targets and moves toward the player
-        if (target == null)
+        allEnemies.Add(this); // Add enemy to global list when enabled
+        if (heartDisplay != null)
         {
-            Debug.LogError("Target is not assigned to the enemy!");
+            heartDisplay.SetMaxHp(enemyHp); // Initialize the heart display for enemy health
         }
     }
+
+    void OnDisable() => allEnemies.Remove(this); // Remove enemy from global list when disabled
 
     void Update()
     {
-        if (target != null && !hasReachedPlayer)
+        if (target != null)
         {
-            float distance = Vector2.Distance(transform.position, target.position);
+            float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
-            if (distance > stopDistance)
+            if (distanceToPlayer > stopDistance)
             {
-                // Move towards the player
-                transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+                MoveTowardsPlayerWithSeparation(); // Continue following the player
             }
             else if (!isPunching)
             {
-                // If the enemy reaches the player and isn't punching, start punching
-                hasReachedPlayer = true;
-                StartCoroutine(PunchAfterDelay());
-            }
-
-            // Flip sprite based on the player's position
-            if (target.position.x < transform.position.x && !flipped ||
-                target.position.x > transform.position.x && flipped)
-            {
-                flipped = !flipped;
-                transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, transform.localScale.z);
+                StartCoroutine(PunchPlayer()); // Punch when close to the player
             }
         }
     }
 
-    private IEnumerator PunchAfterDelay()
+    private void MoveTowardsPlayerWithSeparation()
     {
-        Debug.Log("Enemy is preparing to punch!");  
-        isPunching = true; // Prevent multiple punch attempts
-        yield return new WaitForSeconds(punchDelay);
+        Vector2 position = transform.position;
+        Vector2 moveDirection = ((Vector2)target.position - position).normalized;
+        Vector2 separationForce = Vector2.zero;
 
-        animator.SetTrigger("clobber");
+        foreach (Enemy otherEnemy in allEnemies)
+        {
+            if (otherEnemy != this)
+            {
+                float distance = Vector2.Distance(position, otherEnemy.transform.position);
+                if (distance < separationRadius)
+                {
+                    separationForce += (position - (Vector2)otherEnemy.transform.position).normalized / distance;
+                }
+            }
+        }
 
-        // Check if player is still in attack range
-        if (target.CompareTag("Player") && Vector2.Distance(transform.position, target.position) <= hitRadius)
+        Vector2 finalMove = (moveDirection + separationForce).normalized;
+        transform.position += (Vector3)(finalMove * speed * Time.deltaTime);
+    }
+
+    private IEnumerator PunchPlayer()
+    {
+        isPunching = true;
+
+        animator.SetTrigger("clobber"); // Trigger punch animation
+        yield return new WaitForSeconds(0.3f); // Wait before attacking
+
+        if (target != null && Vector2.Distance(transform.position, target.position) <= stopDistance)
         {
             Debug.Log("Enemy punches the player!");
-            target.GetComponent<PlayerMovement>().damagePlayer(1); // Call player's damage method
+            target.GetComponent<PlayerMovement>()?.damagePlayer(1); // Damage the player
         }
 
-        // Allow punch animation to finish and reset punching state
-        yield return new WaitForSeconds(0.5f); // Adjust duration based on animation
-        animator.SetTrigger("endClobber"); // Reset animation state
-
-        isPunching = false;
-        hasReachedPlayer = false; // Reset movement towards the player
+        yield return new WaitForSeconds(0.5f); // Wait for punch animation to finish
+        animator.SetTrigger("endClobber");
+        isPunching = false; // Reset punching state
     }
 
-    public void TakeDamage(int damageAmount = 1)
+    public void TakeDamage(int damage = 1)
     {
-        theHearts.hp -= damageAmount; // Update the health
-        theHearts.updateHeartSprite(); // Update the heart display
-        if (theHearts.hp <= 0)
+        enemyHp -= damage; // Decrease enemy health
+        Debug.Log($"Enemy took damage! Remaining HP: {enemyHp}");
+
+        if (heartDisplay != null)
         {
-            Die();
+            heartDisplay.updateHeartSprite(enemyHp); // Update the enemy's heart display
+        }
+
+        if (enemyHp <= 0)
+        {
+            Die(); // Trigger death when health reaches 0
         }
     }
 
     private void Die()
     {
         Debug.Log("Enemy defeated!");
-
-        OnDeath?.Invoke(); // Notify spawner or other listeners
-        Destroy(gameObject); // Remove the enemy from the scene
+        OnDeath?.Invoke(); // Notify listeners
+        Destroy(gameObject); // Remove enemy from scene
     }
 }
+
+public class heartScript : MonoBehaviour
+{
+    public GameObject[] hearts; // Array of heart GameObjects
+
+    // Set up the heart display based on the maximum health
+    public void SetMaxHp(int maxHp)
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            hearts[i].SetActive(i < maxHp); // Enable only the hearts needed for max health
+        }
+    }
+
+    // Update the heart display based on the current health
+    public void updateHeartSprite(int currentHp)
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            hearts[i].SetActive(i < currentHp); // Show hearts based on current health
+        }
+    }
+}
+
