@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 2f;
-    public Transform target;
-    public heartScript theHearts;
+    public float speed = 2f; // Movement speed
+    public Transform target; // Player's Transform
+    public heartScript theHearts; // Reference to heartScript for health updates
     public Animator animator; // Animator for enemy
     private float stopDistance = 1f, hitRadius = 1.5f, throwDistanceMax = 7f, throwDistanceMin = 3f; 
     private float punchDelay = 0.5f;
@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (target != null && !hasReachedPlayer)
+        if (target != null)
         {
             float distance = Vector2.Distance(transform.position, target.position);
             if (rushing){
@@ -72,21 +72,21 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger("clobber2");
         if (target.CompareTag("Player") && Vector2.Distance(transform.position, target.position) <= hitRadius)
         {
-            // Trigger the punch animation
             Debug.Log("Enemy punches the player!");
-            target.GetComponent<PlayerMovement>().damagePlayer(1);
+            target.GetComponent<PlayerMovement>().damagePlayer(1); // Call the player's damage method
         }
-        // Wait for the punch animation to finish (assuming it's 0.5 seconds long)
+
+        // Allow time for the punch animation to finish
         yield return new WaitForSeconds(0.5f); // Adjust duration based on animation length
         animator.SetTrigger("clobber2");
         isPunching = false;
         hasReachedPlayer = false; 
     }
 
-    public void TakeDamage(int damageAmount=1)
+    public void TakeDamage(int damageAmount = 1)
     {
-        theHearts.hp-=damageAmount; // Update heart script
-        theHearts.updateHeartSprite(); // Update heart sprite
+        theHearts.hp -= damageAmount; // Update the health
+        theHearts.updateHeartSprite(); // Update the heart display
         if (theHearts.hp <= 0)
         {
             Die();
@@ -95,7 +95,9 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        OnDeath?.Invoke();
-        Destroy(gameObject);
+        Debug.Log("Enemy defeated!");
+
+        OnDeath?.Invoke(); // Notify listeners (like the spawner)
+        Destroy(gameObject); // Remove the enemy from the scene
     }
 }
