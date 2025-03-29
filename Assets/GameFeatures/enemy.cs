@@ -70,14 +70,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Die()
-    {
-        Debug.Log("Enemy defeated!");
+public event System.Action OnDeath;
 
-        // Notify listeners (e.g., the spawner)
-        OnDeath?.Invoke();
-
-        // Destroy the enemy object
-        Destroy(gameObject);
-    }
+private void Die()
+{
+    OnDeath?.Invoke(); // Notify listeners (e.g., EnemySpawner)
+    Destroy(gameObject); // Remove enemy from the scene
+}
 }

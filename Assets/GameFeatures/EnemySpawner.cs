@@ -9,28 +9,14 @@ public class EnemySpawner : MonoBehaviour
     public float respawnDelay = 2f; // Delay before respawning the next wave
 
     private int currentEnemyCount = 0; // Tracks how many enemies are active
-    private bool isRespawning = false; // Prevent overlapping respawn calls
 
     void Start()
     {
         SpawnWave(); // Spawn the first wave of enemies
     }
 
-    private void Update()
-    {
-        // Check if all enemies are defeated and no respawn is in progress
-        if (currentEnemyCount <= 0 && !isRespawning)
-        {
-            isRespawning = true; // Prevent multiple respawn calls
-            Invoke(nameof(SpawnWave), respawnDelay);
-        }
-    }
-
     private void SpawnWave()
     {
-        // Cancel any pending respawn calls to prevent overlapping waves
-        CancelInvoke(nameof(SpawnWave));
-
         // Spawn a random number of enemies (1 to 3)
         int enemyCount = Random.Range(1, 4);
         currentEnemyCount = enemyCount;
@@ -39,8 +25,6 @@ public class EnemySpawner : MonoBehaviour
         {
             SpawnEnemy();
         }
-
-        isRespawning = false; // Reset respawning flag
     }
 
     private void SpawnEnemy()
@@ -49,7 +33,7 @@ public class EnemySpawner : MonoBehaviour
         float spawnX = Random.Range(minX, maxX);
 
         // Instantiate the enemy at the random position
-        new GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
+        GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
 
         if (enemy == null)
         {
@@ -74,5 +58,11 @@ public class EnemySpawner : MonoBehaviour
     {
         // Reduce the active enemy count when an enemy is killed
         currentEnemyCount--;
+
+        // Check if all enemies are defeated
+        if (currentEnemyCount <= 0)
+        {
+            Invoke(nameof(SpawnWave), respawnDelay); // Respawn the next wave after a delay
+        }
     }
 }
