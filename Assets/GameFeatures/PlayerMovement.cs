@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
         if (shouldFlip != flipped)
         {
             flipped = shouldFlip;
-            transform.localScale = new Vector3(flipped ? -1 : 1, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(flipped ? -1*transform.localScale.x : 1*transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
 
         // Punch logic
@@ -101,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Create fireball and set its direction
         GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
-        fireball.GetComponent<Fireball>().direction = Mathf.Atan2(
+        fireball.GetComponent<fireball>().direction = Mathf.Atan2(
             cursorLocation.position.y - transform.position.y,
             cursorLocation.position.x - transform.position.x
         );
