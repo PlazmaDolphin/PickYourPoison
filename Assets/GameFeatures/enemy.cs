@@ -1,22 +1,23 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour
 {
     public float speed = 2f; // Movement speed
     public Transform target; // Player's Transform
-    public float stopDistance = 1.5f; // Distance to stop near the player
-    public float separationRadius = 1f; // Distance to avoid overlapping with other enemies
-    public event Action OnDeath; // Event triggered when enemy dies
+    public float stopDistance = 1.5f; // Distance at which enemies stop
+    public float separationRadius = 1f; // Minimum distance between enemies to avoid overlap
+    public int enemyHp = 3; // Number of hits required to defeat the enemy
+    public event Action OnDeath; // Event triggered when the enemy dies
 
     private static List<Enemy> allEnemies = new List<Enemy>(); // Shared list of all enemies
     private bool isPunching = false; // Prevents multiple punch attempts
     private Animator animator; // Animator for enemy
 
-    void OnEnable() => allEnemies.Add(this); // Add to global list on spawn
-    void OnDisable() => allEnemies.Remove(this); // Remove from global list on death
+    void OnEnable() => allEnemies.Add(this); // Add enemy to global list when enabled
+    void OnDisable() => allEnemies.Remove(this); // Remove enemy from global list when disabled
 
     void Update()
     {
@@ -26,65 +27,52 @@ public class Enemy : MonoBehaviour
 
             if (distanceToPlayer > stopDistance)
             {
-                MoveTowardsPlayerWithSeparation();
+                MoveTowardsPlayerWithSeparation(); // Continue following the player
             }
             else if (!isPunching)
             {
-                StartCoroutine(PunchPlayer());
+                StartCoroutine(PunchPlayer()); // Punch when close to the player
             }
         }
     }
 
-   private void MoveTowardsPlayerWithSeparation()
-{
-    Vector2 position = transform.position;
-    Vector2 moveDirection = ((Vector2)target.position - position).normalized;
-    Vector2 separationForce = Vector2.zero;
-
-    // Apply separation logic to avoid overlapping
-    foreach (Enemy otherEnemy in allEnemies)
+    private void MoveTowardsPlayerWithSeparation()
     {
-        if (otherEnemy != this)
+        Vector2 position = transform.position;
+        Vector2 moveDirection = ((Vector2)target.position - position).normalized;
+        Vector2 separationForce = Vector2.zero;
+
+        foreach (Enemy otherEnemy in allEnemies)
         {
-            float distance = Vector2.Distance(position, otherEnemy.transform.position);
-            if (distance < separationRadius)
+            if (otherEnemy != this)
             {
-                separationForce += (position - (Vector2)otherEnemy.transform.position).normalized / distance;
+                float distance = Vector2.Distance(position, otherEnemy.transform.position);
+                if (distance < separationRadius)
+                {
+                    separationForce += (position - (Vector2)otherEnemy.transform.position).normalized / distance;
+                }
             }
         }
+
+        Vector2 finalMove = (moveDirection + separationForce).normalized;
+        transform.position += (Vector3)(finalMove * speed * Time.deltaTime);
     }
 
-    // Combine movement toward player and separation force
-    Vector2 finalMove = (moveDirection + separationForce).normalized;
-    transform.position += (Vector3)(finalMove * speed * Time.deltaTime);
-}
-
-
-   private IEnumerator PunchPlayer()
-{
-    isPunching = true;
-    Debug.Log("Enemy is preparing to punch!");
-
-    yield return new WaitForSeconds(0.3f); // Wait before attacking
-
-    // Trigger punch animation and apply damage if the player is within range
-    animator.SetTrigger("clobber");
-    if (target.CompareTag("Player") && Vector2.Distance(transform.position, target.position) <= stopDistance)
+    private IEnumerator PunchPlayer()
     {
-        Debug.Log("Enemy punches the player!");
-        target.GetComponent<PlayerMovement>()?.damagePlayer(1); // Damage the player
-    }
+        isPunching = true;
 
-    yield return new WaitForSeconds(0.5f); // Allow punch animation to finish
-    isPunching = false; // Allow another punch
-}
+        animator.SetTrigger("clobber"); // Trigger punch animation
+        yield return new WaitForSeconds(0.3f); // Wait before attacking
 
+        if (target != null && Vector2.Distance(transform.position, target.position) <= stopDistance)
+        {
+            Debug.Log("Enemy punches the player!");
+            target.GetComponent<PlayerMovement>()?.damagePlayer(1); // Damage the player
+        }
 
-    public void TakeDamage(int damage = 1)
-    {
-        // Trigger death if health is <= 0 (add logic for health here)
-        Debug.Log("Enemy defeated!");
-        OnDeath?.Invoke();
-        Destroy(gameObject);
+        yield return new WaitForSeconds(0.5f); // Wait for punch animation to finish
+        animator.SetTrigger("endClobber");
+        isPunching = false; // Reset punching state
     }
 }
