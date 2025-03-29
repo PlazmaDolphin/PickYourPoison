@@ -3,7 +3,7 @@ using UnityEngine;
 public class iceSpike : MonoBehaviour
 {
     private bool gotHit = false; // Flag to check if used
-    private bool detecting = false;
+    private bool detecting = true;
     private float detectAt = 0.2f;
     private float createTime;
     private const float LIFETIME = 0.6f;
@@ -36,7 +36,7 @@ public class iceSpike : MonoBehaviour
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(1);
+                enemy.TakeDamage(2);
             }
             gotHit = true;
 
