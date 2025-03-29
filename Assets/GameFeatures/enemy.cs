@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using System.Collections;
 
 public class Enemy : MonoBehaviour
@@ -12,18 +13,41 @@ public class Enemy : MonoBehaviour
     private float punchDelay = 0.5f;
     public event Action OnDeath; // When enemy dies?
     public bool rushing = true; // If the enemy is rushing
+    private float separationRadius = 0.5f; // Minimum distance between enemies to avoid overlap
+    private bool isPunching = false; // Prevent multiple punch coroutines
+    private bool flipped = false; // For sprite flipping
+    private bool hasReachedPlayer = false; // Check if the enemy has reached the player
 
-    private bool hasReachedPlayer = false; 
-    private bool isPunching = false; 
-    private bool flipped = false;
+    // Reference to all enemies (shared by the spawner)
+    private static List<Enemy> allEnemies = new List<Enemy>();
+
+    private void OnEnable()
+    {
+        // Add this enemy to the global list when it spawns
+        allEnemies.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        // Remove this enemy from the global list when it is destroyed
+        allEnemies.Remove(this);
+    }
 
     void Update()
     {
         if (target != null)
         {
-            float distance = Vector2.Distance(transform.position, target.position);
-            if (rushing){
-                if (distance > stopDistance)
+            float distanceToPlayer = Vector2.Distance(transform.position, target.position);
+
+            if (distanceToPlayer > stopDistance)
+            {
+                // Move toward the player while avoiding other enemies
+                MoveTowardsTargetWithSeparation();
+            }
+            else
+            {
+                // Start punching if within range
+                if (!isPunching)
                 {
                     // Move towards the player
                     transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
@@ -35,13 +59,13 @@ public class Enemy : MonoBehaviour
                     StartCoroutine(PunchAfterDelay());
                 }
             }
-            else{
-                if (distance > throwDistanceMax)
+            /*
+                if (distanceToPlayer > throwDistanceMax)
                 {
                     // Move towards the player
                     transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
                 }
-                else if (distance < throwDistanceMin && !isPunching)
+                else if (distanceToPlayer < throwDistanceMin && !isPunching)
                 {
                     // If the enemy is close enough to the player, start punching
                     //hasReachedPlayer = true;
@@ -51,7 +75,7 @@ public class Enemy : MonoBehaviour
                     // Back up
                     transform.position = Vector2.MoveTowards(transform.position, target.position, -speed * Time.deltaTime);
                 }
-            }
+            }*/
             // Flip sprite based on target position
             if (target.position.x < transform.position.x && !flipped ||
                 target.position.x > transform.position.x && flipped)
@@ -59,6 +83,48 @@ public class Enemy : MonoBehaviour
                 flipped = !flipped;
                 transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, transform.localScale.z);
             }
+
+            // Flip sprite to face the player
+            FlipSprite();
+        }
+    }
+
+    private void MoveTowardsTargetWithSeparation()
+    {
+        Vector2 position = transform.position;
+        Vector2 targetDirection = ((Vector2)target.position - position).normalized;
+        Vector2 separationForce = Vector2.zero;
+
+        // Separation logic: Avoid overlapping with other enemies
+        foreach (Enemy otherEnemy in allEnemies)
+        {
+            if (otherEnemy != this) // Don't check self
+            {
+                float distance = Vector2.Distance(position, otherEnemy.transform.position);
+                if (distance < separationRadius)
+                {
+                    // Calculate avoidance force
+                    Vector2 avoidDirection = (position - (Vector2)otherEnemy.transform.position).normalized;
+                    separationForce += avoidDirection / distance; // Stronger force when closer
+                }
+            }
+        }
+
+        // Combine movement toward player with separation force
+        Vector2 combinedForce = (targetDirection + separationForce).normalized;
+
+        // Apply the movement
+        transform.position += (Vector3)(combinedForce * speed * Time.deltaTime);
+    }
+
+    private void FlipSprite()
+    {
+        // Flip sprite based on the target's position
+        if (target.position.x < transform.position.x && !flipped ||
+            target.position.x > transform.position.x && flipped)
+        {
+            flipped = !flipped;
+            transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
     }
 
