@@ -11,18 +11,20 @@ public class Enemy : MonoBehaviour
     public float separationRadius = 1f; // Minimum distance between enemies to avoid overlap
     public int enemyHp = 3; // Number of hits required to defeat the enemy
     public event Action OnDeath; // Event triggered when the enemy dies
-    public heartScript heartDisplay; // Reference to the heart script for enemy health UI
+    public EnemyHeartScript heartDisplay; // Reference to the heart script for enemy health UI
 
     private static List<Enemy> allEnemies = new List<Enemy>(); // Shared list of all enemies
     private bool isPunching = false; // Prevents multiple punch attempts
-    private Animator animator; // Animator for enemy
+    public Animator animator; // Animator for enemy
+    private bool isFlipped = false; // Check if the enemy is flipped
 
     void OnEnable()
     {
         allEnemies.Add(this); // Add enemy to global list when enabled
         if (heartDisplay != null)
         {
-            heartDisplay.SetMaxHp(enemyHp); // Initialize the heart display for enemy health
+            heartDisplay.hp = enemyHp; // Initialize heart display with enemy health
+            heartDisplay.updateHeartSprite(); // Update the heart display
         }
     }
 
@@ -42,7 +44,20 @@ public class Enemy : MonoBehaviour
             {
                 StartCoroutine(PunchPlayer()); // Punch when close to the player
             }
+                    //face towards player
+            Vector2 direction = (Vector2)target.position - (Vector2)transform.position;
+            if (direction.x < 0 && !isFlipped)
+            {
+                isFlipped = true;
+                transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            }
+            else if (direction.x > 0 && isFlipped)
+            {
+                isFlipped = false;
+                transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            }
         }
+
     }
 
     private void MoveTowardsPlayerWithSeparation()
@@ -73,7 +88,7 @@ public class Enemy : MonoBehaviour
 
         animator.SetTrigger("clobber"); // Trigger punch animation
         yield return new WaitForSeconds(0.3f); // Wait before attacking
-
+        animator.SetTrigger("clobber2"); // Trigger second punch animation
         if (target != null && Vector2.Distance(transform.position, target.position) <= stopDistance)
         {
             Debug.Log("Enemy punches the player!");
@@ -81,7 +96,7 @@ public class Enemy : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f); // Wait for punch animation to finish
-        animator.SetTrigger("endClobber");
+        animator.SetTrigger("clobber2");
         isPunching = false; // Reset punching state
     }
 
@@ -92,7 +107,8 @@ public class Enemy : MonoBehaviour
 
         if (heartDisplay != null)
         {
-            heartDisplay.updateHeartSprite(enemyHp); // Update the enemy's heart display
+            heartDisplay.hp = enemyHp; // Update heart display with new health
+            heartDisplay.updateHeartSprite(); // Update the enemy's heart display
         }
 
         if (enemyHp <= 0)
@@ -108,27 +124,3 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject); // Remove enemy from scene
     }
 }
-
-public class heartScript : MonoBehaviour
-{
-    public GameObject[] hearts; // Array of heart GameObjects
-
-    // Set up the heart display based on the maximum health
-    public void SetMaxHp(int maxHp)
-    {
-        for (int i = 0; i < hearts.Length; i++)
-        {
-            hearts[i].SetActive(i < maxHp); // Enable only the hearts needed for max health
-        }
-    }
-
-    // Update the heart display based on the current health
-    public void updateHeartSprite(int currentHp)
-    {
-        for (int i = 0; i < hearts.Length; i++)
-        {
-            hearts[i].SetActive(i < currentHp); // Show hearts based on current health
-        }
-    }
-}
-

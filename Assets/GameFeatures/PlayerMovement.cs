@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject fireballPrefab;
     public GameObject lightningBoltPrefab;
     public powerBar theBarofPower;
-    public heartScript theHearts; // Reference to the heart script
+    public EnemyHeartScript theHearts; // Reference to the heart script
 
     // Bounding box for movement (optional)
     private float minX = -8f, maxX = 8f;

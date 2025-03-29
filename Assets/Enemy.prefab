@@ -300,10 +300,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   target: {fileID: 0}
-  theHearts: {fileID: 5257112952587040330}
-  animator: {fileID: 7187980916819421199}
   stopDistance: 0.5
-  punchDelay: 1
+  separationRadius: 1
+  enemyHp: 3
+  heartDisplay: {fileID: 5257112952587040330}
+  animator: {fileID: 7187980916819421199}
 --- !u!95 &7187980916819421199
 Animator:
   serializedVersion: 7
