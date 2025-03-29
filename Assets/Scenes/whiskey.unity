@@ -800,9 +800,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   target: {fileID: 1604119173}
-  theHearts: {fileID: 0}
-  animator: {fileID: 0}
-  rushing: 1
+  stopDistance: 1.5
+  separationRadius: 1
+  enemyHp: 3
 --- !u!4 &1143223968
 Transform:
   m_ObjectHideFlags: 0
@@ -866,6 +866,18 @@ PrefabInstance:
     - target: {fileID: 713408030183083375, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431194814341472626, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1604119173}
+    - target: {fileID: 3431194814341472626, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+      propertyPath: stopDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431194814341472626, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
+      propertyPath: separationRadius
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8955633231897145111, guid: 165b95b48ce3ec044b315231f77f31c4, type: 3}
       propertyPath: m_Name
@@ -1538,6 +1550,7 @@ MonoBehaviour:
   spawnY: 6
   minX: -8
   maxX: 8
+  spawnDelay: 0.5
 --- !u!114 &1948844571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1552,9 +1565,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   target: {fileID: 0}
-  theHearts: {fileID: 0}
-  animator: {fileID: 0}
-  rushing: 1
+  stopDistance: 1.5
+  separationRadius: 1
+  enemyHp: 3
 --- !u!4 &1948844572
 Transform:
   m_ObjectHideFlags: 0
