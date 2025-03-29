@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c8d47ffc163418745b1ec36d22a358e4
+guid: 1648964bcb6b38347a7b2c471cbad52a
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: lightningBolt_midFight_2
+  - name: inventoryicon_lightning
     originalName: 
-    pivot: {x: 0.5, y: -1.0555556}
+    pivot: {x: 0.45833334, y: -0.03448276}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,13 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 64
-      height: 18
-<<<<<<< HEAD
-    spriteID: 7dc2b62fdb354ac4daed779be467fbbf
-=======
-    spriteID: 82500cb57ebe19a45bbc4c51cf2c859b
->>>>>>> 3dea2e987dd7a52edf4e11ce3bf5c89e775e74f2
+      width: 24
+      height: 29
+    spriteID: b8eb58d18c200e14ea0fd9d13d6829f3
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -151,25 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1765577183
-    name: lightningBolt_midFight_2
+    guid: 1967410670
+    name: inventoryicon_lightning
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: lightningBolt_midFight_2
+    - name: inventoryicon_lightning
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 0
-        y: 19
-        width: 64
-        height: 18
-<<<<<<< HEAD
-      spriteId: 7dc2b62fdb354ac4daed779be467fbbf
-=======
-      spriteId: 82500cb57ebe19a45bbc4c51cf2c859b
->>>>>>> 3dea2e987dd7a52edf4e11ce3bf5c89e775e74f2
+        x: 5
+        y: 1
+        width: 24
+        height: 29
+      spriteId: b8eb58d18c200e14ea0fd9d13d6829f3
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -188,5 +180,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 64, y: 64}
-  previousTextureSize: {x: 128, y: 32}
+  canvasSize: {x: 32, y: 32}
+  previousTextureSize: {x: 32, y: 64}
