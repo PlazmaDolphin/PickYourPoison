@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform cursorLocation;
     public Animator animator;
     public GameObject fireballPrefab;
+    public GameObject lightningBoltPrefab;
     public powerBar theBarofPower;
 
     // Bounding box for movement (optional)
@@ -112,6 +113,21 @@ public class PlayerMovement : MonoBehaviour
         // Ignore collision with the player
         Physics2D.IgnoreCollision(
             fireball.GetComponent<CircleCollider2D>(),
+            GetComponent<BoxCollider2D>()
+        );
+    }
+    private void SpawnLightningBolt()
+    {
+        // Create lightning bolt and set its direction
+        GameObject lightningBolt = Instantiate(lightningBoltPrefab, transform.position, Quaternion.identity);
+        lightningBolt.GetComponent<LightningBolt>().direction = Mathf.Atan2(
+            cursorLocation.position.y - transform.position.y,
+            cursorLocation.position.x - transform.position.x
+        );
+
+        // Ignore collision with the player
+        Physics2D.IgnoreCollision(
+            lightningBolt.GetComponent<CircleCollider2D>(),
             GetComponent<BoxCollider2D>()
         );
     }
