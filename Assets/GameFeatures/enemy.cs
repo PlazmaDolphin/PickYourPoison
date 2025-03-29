@@ -3,27 +3,39 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 2f;
-    public Transform target;
-    public float stopDistance = 0.5f; // Distance to maintain from player
-    public float punchDelay = 1f; // Delay before punching
+    public float speed = 2f; // Movement speed
+    public Transform target; // Target to follow (usually the player)
+    public float stopDistance = 0.5f; // Distance at which the enemy stops moving towards the target
+    public float punchDelay = 1f; // Delay before punching the player
 
-    private bool hasReachedPlayer = false;
+    private int health = 5; // Enemy health
+    private bool hasReachedPlayer = false; // Check if the enemy has reached the player
+    private bool isPunching = false; // Prevent multiple punch coroutines from running
 
-    private void Update()
+    void Start()
+    {
+        // Dynamically assign target (player) if not set in the Inspector
+        if (target == null && GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            target = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+    }
+
+    void Update()
     {
         if (target != null && !hasReachedPlayer)
         {
-            // Move towards the player but stop at a certain distance
             float distance = Vector2.Distance(transform.position, target.position);
+
             if (distance > stopDistance)
             {
+                // Move towards the player
                 Vector2 direction = (target.position - transform.position).normalized;
                 transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             }
-            else
+            else if (!isPunching)
             {
-                // Stop movement when within the stopDistance
+                // If the enemy reaches the player and isn't punching, start punching
                 hasReachedPlayer = true;
                 StartCoroutine(PunchAfterDelay());
             }
@@ -32,25 +44,34 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator PunchAfterDelay()
     {
-        // Wait for the specified punch delay
+        isPunching = true; // Prevent multiple coroutines from starting
         yield return new WaitForSeconds(punchDelay);
 
-        // Perform the punch action (e.g., reduce player's health, play animation, etc.)
         if (target != null)
         {
             Debug.Log("Enemy punches the player!");
-            // Add your punch logic here (e.g., reduce player's health)
+            // Add logic here to reduce the player's health or trigger an effect
         }
 
-        // Reset behavior if needed, or make the enemy idle
-        hasReachedPlayer = false;
+        // Allow the enemy to punch again if needed
+        isPunching = false;
+        hasReachedPlayer = false; // Reset to allow movement again
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void TakeDamage()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        health--; // Reduce health by 1
+        Debug.Log("Enemy hit! Remaining health: " + health);
+
+        if (health <= 0)
         {
-            Debug.Log("Enemy collided with player!");
+            Die();
         }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Enemy defeated!");
+        Destroy(gameObject); // Destroy the enemy object
     }
 }
