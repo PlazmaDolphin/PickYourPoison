@@ -67,11 +67,11 @@ public class PlayerMovement : MonoBehaviour
             //move up a little
             transform.position -= new Vector3(0, 1f, 0);
             potionType = 0;
+            animator.SetTrigger("potionLose");
         }
         //Update animation
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
-        animator.SetBool("potionHeld", potionType != 0);
     }
 
     void FixedUpdate()
@@ -99,6 +99,7 @@ IEnumerator Punch()
     public void AddPotion(int potionType)
     {
         this.potionType = potionType;
+        animator.SetTrigger("potionGet");
         // Update animation or other logic here
     }
 }

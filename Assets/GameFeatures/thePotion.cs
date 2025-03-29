@@ -38,6 +38,10 @@ public class thePotion : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (potionType == NONE)
+        {
+            return;
+        }
         if (other.gameObject.CompareTag("Player"))
         {
             //Add potion to player inventory
