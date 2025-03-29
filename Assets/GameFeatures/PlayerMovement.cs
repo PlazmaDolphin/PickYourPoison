@@ -39,9 +39,10 @@ public class PlayerMovement : MonoBehaviour
 
         // Flip sprite based on cursor location
         if (cursorLocation.position.x < transform.position.x && !flipped ||
-            cursorLocation.position.x > transform.position.x && flipped) {
+            cursorLocation.position.x > transform.position.x && flipped)
+        {
             flipped = !flipped;
-            transform.localScale = new Vector3(-1*transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(-1 * transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
 
         // Punch logic
@@ -57,9 +58,9 @@ public class PlayerMovement : MonoBehaviour
             /*
             transform.position += new Vector3(0, 1f, 0);
             GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
-            fireball.GetComponent<fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
+            fireball.GetComponent<Fireball>().direction = Mathf.Atan2(cursorLocation.position.y - transform.position.y, cursorLocation.position.x - transform.position.x);
             Physics2D.IgnoreCollision(fireball.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
-            //move up a little
+            // Revert position after spawning fireball
             transform.position -= new Vector3(0, 1f, 0);
             potionType = 0;
             animator.SetTrigger("PotionLose");
@@ -70,7 +71,8 @@ public class PlayerMovement : MonoBehaviour
             // Use power
             theBarofPower.usePower(transform, cursorLocation, GetComponent<Collider2D>());
         }
-        //Update animation
+
+        // Update animation
         animator.SetFloat("speed", movement.magnitude);
         animator.SetBool("punching", isPunching);
     }
@@ -95,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
         // Example punch logic with Raycast
         RaycastHit2D hit = Physics2D.Raycast(
             transform.position,
-            flipped ? Vector2.left : Vector2.right, 
+            flipped ? Vector2.left : Vector2.right,
             punchRange
         );
 
@@ -113,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Create fireball and set its direction
         GameObject fireball = Instantiate(fireballPrefab, transform.position, Quaternion.identity);
-        fireball.GetComponent<fireball>().direction = Mathf.Atan2(
+        fireball.GetComponent<Fireball>().direction = Mathf.Atan2(
             cursorLocation.position.y - transform.position.y,
             cursorLocation.position.x - transform.position.x
         );
@@ -129,6 +131,5 @@ public class PlayerMovement : MonoBehaviour
     {
         this.potionType = potionType;
         animator.SetTrigger("PotionGet");
-        // Update animation or other logic here
     }
 }

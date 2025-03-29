@@ -26,6 +26,7 @@ public class powerBar : MonoBehaviour
             Debug.Log("Power bar is full!");
         }
     }
+<<<<<<< HEAD
     public void usePower(Transform playerPos, Transform cursorPos, Collider2D playerCol){
         //FIRE + NONE = FIREBALL
         if (potion1 == thePotion.FIRE && potion2 == thePotion.NONE)
@@ -37,6 +38,9 @@ public class powerBar : MonoBehaviour
             potion1 = thePotion.NONE;
         }
         //FIRE + FIRE = FIREWALL
+=======
+    public void usePower(Transform playerPos, Transform cursorPos){
+>>>>>>> 7cea9f50cdb951cf32e8a338572a406eceb8d7fd
     }
     // Update is called once per frame
     void Update()
