@@ -4,17 +4,28 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 2f;
-    public Transform target;
-    public heartScript theHearts;
+    public float speed = 2f; // Movement speed
+    public Transform target; // Player's Transform
+    public heartScript theHearts; // Reference to heartScript for health updates
     public Animator animator; // Animator for enemy
-    private float stopDistance = 1f, hitRadius = 1.5f; 
-    private float punchDelay = 0.3f;
-    public event Action OnDeath; // When enemy dies?
 
-    private bool hasReachedPlayer = false; 
-    private bool isPunching = false; 
-    private bool flipped = false;
+    private float stopDistance = 1f; // Distance at which the enemy stops moving toward the player
+    private float hitRadius = 1.5f; // Radius for attack range
+    private float punchDelay = 0.3f; // Delay before punching
+    public event Action OnDeath; // Event triggered when enemy dies
+
+    private bool hasReachedPlayer = false; // To check if enemy reached the player
+    private bool isPunching = false; // Prevent multiple punch coroutines
+    private bool flipped = false; // For sprite flipping
+
+    void Start()
+    {
+        // Ensure enemy immediately targets and moves toward the player
+        if (target == null)
+        {
+            Debug.LogError("Target is not assigned to the enemy!");
+        }
+    }
 
     void Update()
     {
@@ -33,7 +44,8 @@ public class Enemy : MonoBehaviour
                 hasReachedPlayer = true;
                 StartCoroutine(PunchAfterDelay());
             }
-            // Flip sprite based on target position
+
+            // Flip sprite based on the player's position
             if (target.position.x < transform.position.x && !flipped ||
                 target.position.x > transform.position.x && flipped)
             {
@@ -46,27 +58,30 @@ public class Enemy : MonoBehaviour
     private IEnumerator PunchAfterDelay()
     {
         Debug.Log("Enemy is preparing to punch!");  
-        isPunching = true; // Prevent multiple coroutines from starting
-        //Do windup here
+        isPunching = true; // Prevent multiple punch attempts
         yield return new WaitForSeconds(punchDelay);
+
         animator.SetTrigger("clobber");
+
+        // Check if player is still in attack range
         if (target.CompareTag("Player") && Vector2.Distance(transform.position, target.position) <= hitRadius)
         {
-            // Trigger the punch animation
             Debug.Log("Enemy punches the player!");
-            target.GetComponent<PlayerMovement>().damagePlayer(1);
+            target.GetComponent<PlayerMovement>().damagePlayer(1); // Call player's damage method
         }
-        // Wait for the punch animation to finish (assuming it's 0.5 seconds long)
-        yield return new WaitForSeconds(0.5f); // Adjust duration based on animation length
-        animator.SetTrigger("endClobber");
+
+        // Allow punch animation to finish and reset punching state
+        yield return new WaitForSeconds(0.5f); // Adjust duration based on animation
+        animator.SetTrigger("endClobber"); // Reset animation state
+
         isPunching = false;
-        hasReachedPlayer = false; 
+        hasReachedPlayer = false; // Reset movement towards the player
     }
 
-    public void TakeDamage(int damageAmount=1)
+    public void TakeDamage(int damageAmount = 1)
     {
-        theHearts.hp-=damageAmount; // Update heart script
-        theHearts.updateHeartSprite(); // Update heart sprite
+        theHearts.hp -= damageAmount; // Update the health
+        theHearts.updateHeartSprite(); // Update the heart display
         if (theHearts.hp <= 0)
         {
             Die();
@@ -75,7 +90,9 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        OnDeath?.Invoke();
-        Destroy(gameObject);
+        Debug.Log("Enemy defeated!");
+
+        OnDeath?.Invoke(); // Notify spawner or other listeners
+        Destroy(gameObject); // Remove the enemy from the scene
     }
 }
