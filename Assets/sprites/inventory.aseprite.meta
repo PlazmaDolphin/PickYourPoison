@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c8d47ffc163418745b1ec36d22a358e4
+guid: ec59d8f0083aaf74f9228ac8ec5a26dd
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: lightningBolt_midFight_2
+  - name: inventory
     originalName: 
-    pivot: {x: 0.5, y: -1.0555556}
+    pivot: {x: 0.75, y: -0.21052632}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,13 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 64
-      height: 18
-<<<<<<< HEAD
-    spriteID: 7dc2b62fdb354ac4daed779be467fbbf
-=======
-    spriteID: 82500cb57ebe19a45bbc4c51cf2c859b
->>>>>>> 3dea2e987dd7a52edf4e11ce3bf5c89e775e74f2
+      width: 36
+      height: 19
+    spriteID: 5bd598e9237851144ab8c54256a00fbe
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -151,25 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1765577183
-    name: lightningBolt_midFight_2
+    guid: 15320842
+    name: inventory
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: lightningBolt_midFight_2
+    - name: inventory
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 0
-        y: 19
-        width: 64
-        height: 18
-<<<<<<< HEAD
-      spriteId: 7dc2b62fdb354ac4daed779be467fbbf
-=======
-      spriteId: 82500cb57ebe19a45bbc4c51cf2c859b
->>>>>>> 3dea2e987dd7a52edf4e11ce3bf5c89e775e74f2
+        x: 5
+        y: 4
+        width: 36
+        height: 19
+      spriteId: 5bd598e9237851144ab8c54256a00fbe
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -189,4 +181,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 64, y: 64}
-  previousTextureSize: {x: 128, y: 32}
+  previousTextureSize: {x: 64, y: 32}
