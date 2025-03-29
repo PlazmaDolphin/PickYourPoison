@@ -4,7 +4,7 @@ public class SoundEffectsPlayer : MonoBehaviour
 {
     
     public AudioSource src;//the source audio that take the audio from any clip being played to play it
-    public AudioClip drinksfx, atksfx, majsfx, dmgsfx, goblinsfx; //audio clip names go here
+    public AudioClip drinksfx, atksfx, majsfx, dmgsfx, goblinsfx, goblinMadsfx; //audio clip names go here
 
     public void Drinking() //drinking any potion sound effect
     {
@@ -40,7 +40,7 @@ public class SoundEffectsPlayer : MonoBehaviour
 
     /*public void goblinmad()
     {
-        src.clip = sister
+        src.clip = goblinMadsfx;
     }
 /*
 
