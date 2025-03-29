@@ -46,7 +46,7 @@ public class EnemySpawner : MonoBehaviour
         float spawnX = Random.Range(minX, maxX);
 
         // Instantiate the enemy at the random position
-        GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);
+        GameObject enemy = Instantiate(enemyPrefab, new Vector3(spawnX, spawnY, 0), Quaternion.identity);  // FIXME trying to access something that does not exist anymore
 
         // Assign the player's Transform as the enemy's target
         Enemy enemyScript = enemy.GetComponent<Enemy>();
