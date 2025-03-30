@@ -179,7 +179,7 @@ IEnumerator Punch()
         if(theHearts.hp <= 0)
         {
             Debug.Log("Player is dead!");
-            // show moouse
+            // show mouse
             Cursor.visible = true;
             SceneManager.LoadScene(2); // Load Game Over scene
         }
